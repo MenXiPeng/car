@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    username: root
+    password: mysql123456
+    url: jdbc:mysql://127.0.0.1:3306/car?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&serverTimezone=Asia/Shanghai&allowMultiQueries=true&useSSL=false&zeroDateTimeBehavior=convertToNull
+    # Hikari will use the above plus the following to setup connection poolin
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      minimum-idle: 10
+      auto-commit: true
+      idle-timeout: 60000
+      pool-name: carHikariCP
+      max-lifetime: 1800000
+      connection-timeout: 60000
+      leak-detection-threshold: 600000
+      data-source-properties:
+        prepStmtCacheSize: 250
+logging:
+  file:
+    path: /Users/menxipeng/Desktop/logs/car

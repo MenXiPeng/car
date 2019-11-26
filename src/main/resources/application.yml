@@ -1,0 +1,14 @@
+spring:
+  profiles:
+    active: dev
+
+server:
+  port: 8087
+  servlet:
+    context-path: /car
+
+mybatis:
+  type-aliases-package: com.mxp.car.model
+  configuration:
+    map-underscore-to-camel-case: true
+    default-statement-timeout: 60000
