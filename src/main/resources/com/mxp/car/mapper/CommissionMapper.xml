@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mxp.car.mapper.CommissionMapper">
+
+    <sql id="column">
+        commission_info.commission_id,
+        commission_info.user_id,
+        commission_info.principal,
+        commission_info.contact,
+        commission_info.phone,
+        commission_info.policy_num,
+        commission_info.company,
+        commission_info.insured,
+        commission_info.risk_time,
+        commission_info.report_num,
+        commission_info.damage_amount,
+        commission_info.discount,
+        commission_info.salesman,
+        commission_info.payment_time,
+        commission_info.checkout_time,
+        commission_info.reminder_time,
+        commission_info.reminder,
+        commission_info.remarks,
+        commission_info.create_time
+    </sql>
+
+    <insert id="insert" parameterType="Commission">
+        INSERT INTO commission_info(<include refid="column" />)
+        VALUES (
+        #{commissionId},
+        #{userId},
+        #{principal},
+        #{contact},
+        #{phone},
+        #{policyNum},
+        #{company},
+        #{insured},
+        #{riskTime},
+        #{reportNum},
+        #{damageAmount},
+        #{discount},
+        #{salesman},
+        #{paymentTime},
+        #{checkoutTime},
+        #{reminderTime},
+        #{createTime},
+        #{reminder},
+        #{remarks});
+    </insert>
+</mapper>

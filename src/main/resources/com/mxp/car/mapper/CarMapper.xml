@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mxp.car.mapper.CarMapper">
+    <sql id="column">
+        car_info.car_id,
+        car_info.user_id,
+        car_info.commission_id,
+        car_info.name,
+        car_info.sex,
+        car_info.ethnic,
+        car_info.birth,
+        car_info.address,
+        car_info.id_car,
+        car_info.organ_auth,
+        car_info.validity,
+        car_info.phone,
+        car_info.is_main_car,
+        car_info.create_time
+    </sql>
+
+    <insert id="insert" parameterType="Car">
+       INSERT INTO car_info(<include refid="column" />)
+        VALUES (#{carId},#{userId},#{commissionId},#{name},#{sex},#{ethnic},#{birth},#{address},#{idCar},#{organAuth},#{validity},#{photo},#{isMainCar},#{createTime});
+    </insert>
+
+</mapper>
