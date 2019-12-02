@@ -22,6 +22,6 @@
 
     <insert id="insert" parameterType="DriverInfo">
         INSERT INTO driver_info(<include refid="column" />)
-        VALUES (#{driverId},#{commissionId},{name},#{sex},#{country},#{address},#{birth},#{firstDocTime},#{driveModel},#{validity},#{idCar},#{fileNum},#{record},#{remarks},#{isMainDriver},#{createTime})
+        VALUES (#{driverId},#{commissionId},#{name},#{sex},#{country},#{address},#{birthDate},#{firstDocDate},#{driveModel},#{validityDate},#{idCar},#{fileNum},#{record},#{remarks},#{isMainDriver},#{createTime})
     </insert>
 </mapper>

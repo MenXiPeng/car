@@ -55,4 +55,5 @@ public class Travel {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime createTime;
+    private byte isMainTravel;
 }

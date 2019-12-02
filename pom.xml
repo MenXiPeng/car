@@ -91,6 +91,13 @@
             <artifactId>pagehelper-spring-boot-starter</artifactId>
             <version>${pageHelper.version}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils -->
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <version>1.9.4</version>
+        </dependency>
+
     </dependencies>
 
     <build>

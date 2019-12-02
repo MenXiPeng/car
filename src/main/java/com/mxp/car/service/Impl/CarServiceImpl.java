@@ -5,6 +5,7 @@ import com.mxp.car.mapper.CarMapper;
 import com.mxp.car.model.Car;
 import com.mxp.car.service.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * EMAIL menxipeng@gmail.com
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * DATE: 2019/11/27
  * TIME: 23:11
  */
+@Service
 public class CarServiceImpl extends BaseServiceImpl<Car,Long> implements CarService {
 
     @Autowired

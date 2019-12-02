@@ -34,14 +34,14 @@ public class Car {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
-    private LocalDate birth;
+    private LocalDate birthDate;
     private String address;
     private String idCar;
     private String organAuth;
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
-    private LocalDate validity;
+    private LocalDate validityDate;
     private String photo;
     private byte isMainCar;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

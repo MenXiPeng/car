@@ -24,11 +24,12 @@
         travel.remarks,
         travel.commission_id,
         travel.travel_id,
-        travel.create_time
+        travel.create_time,
+        travel.is_main_travel
     </sql>
 
     <insert id="insert" parameterType="Travel">
-        INSERT INTO travel(<include refid="column" />) VALUES (#{carNum},#{carType},#{owner},#{address},#{useType},#{brandType},#{idenCode},#{engineNUm},#{registeredDate},#{issueDate},#{fileNum},#{loadNum},#{totalQuality},##{curbQuality},#{loadQuality},#{profileSize},#{tractionQuality},#{testRecord},#{barNum}m#{remarks},#{commissionId},#{travelId},#{createTime});
+        INSERT INTO travel(<include refid="column" />) VALUES (#{carNum},#{carType},#{owner},#{address},#{useType},#{brandType},#{idenCode},#{engineNUm},#{registeredDate},#{issueDate},#{fileNum},#{loadNum},#{totalQuality},#{curbQuality},#{loadQuality},#{profileSize},#{tractionQuality},#{testRecord},#{barNum},#{remarks},#{commissionId},#{travelId},#{createTime},#{isMainTravel});
     </insert>
 
 </mapper>

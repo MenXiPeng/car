@@ -1,5 +1,6 @@
 package com.mxp.car.aspect;
 
+import org.aspectj.lang.annotation.Aspect;
 import org.springframework.aop.Advisor;
 import org.springframework.aop.aspectj.AspectJExpressionPointcut;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.interceptor.*;
 
@@ -19,10 +21,10 @@ import java.util.HashMap;
  * DATE: 2019/11/26
  * TIME: 20:47
  */
-@Configuration
+@Component
 public class TransactionalAspect {
     // Point
-    private static final String AOP_POINTCUT_EXPRESSION = "execution(* com.mxp.car.service.*.*.*Service.*(..))";
+    private static final String AOP_POINTCUT_EXPRESSION = "execution(* com.mxp.car.service.*.*(..))";
 
     @Autowired
     private DataSourceTransactionManager transactionManager;

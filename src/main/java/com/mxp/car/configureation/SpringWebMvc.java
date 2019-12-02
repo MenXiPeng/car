@@ -46,6 +46,7 @@ public class SpringWebMvc implements WebMvcConfigurer {
         converters.add(converter);
     }
 
+
     @Bean
     public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
         return new MappingJackson2HttpMessageConverter() {

@@ -20,7 +20,7 @@
 
     <insert id="insert" parameterType="Car">
        INSERT INTO car_info(<include refid="column" />)
-        VALUES (#{carId},#{userId},#{commissionId},#{name},#{sex},#{ethnic},#{birth},#{address},#{idCar},#{organAuth},#{validity},#{photo},#{isMainCar},#{createTime});
+        VALUES (#{carId},#{userId},#{commissionId},#{name},#{sex},#{ethnic},#{birthDate},#{address},#{idCar},#{organAuth},#{validityDate},#{photo},#{isMainCar},#{createTime});
     </insert>
 
 </mapper>

@@ -32,16 +32,16 @@ public class DriverInfo {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
-    private LocalDate birth;
+    private LocalDate birthDate;
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
-    private LocalDate firstDocTime;
+    private LocalDate firstDocDate;
     private String driveModel;
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
-    private LocalDate validity;
+    private LocalDate validityDate;
     private String idCar;
     private String fileNum;
     private String record;
