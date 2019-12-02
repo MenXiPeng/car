@@ -46,4 +46,16 @@
         #{reminder},
         #{remarks});
     </insert>
+
+    <select id="selectMapByPage" parameterType="map" resultType="map">
+
+    </select>
+
+    <select id="selectById" parameterType="long" resultType="Commission">
+        SELECT <include refid="column" /> FROM commission_info
+        <where>
+            commission_id=#{id}
+        </where>
+    </select>
+
 </mapper>

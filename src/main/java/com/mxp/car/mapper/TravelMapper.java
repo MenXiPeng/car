@@ -1,7 +1,10 @@
 package com.mxp.car.mapper;
 
+import com.mxp.car.model.DriverInfo;
 import com.mxp.car.model.Travel;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 /**
  * EMAIL menxipeng@gmail.com
@@ -11,4 +14,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface TravelMapper extends BaseMapper<Travel,Long> {
+    List<Travel> selectByCommId(Long commissionId);
 }

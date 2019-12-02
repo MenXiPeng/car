@@ -32,4 +32,18 @@
         INSERT INTO travel(<include refid="column" />) VALUES (#{carNum},#{carType},#{owner},#{address},#{useType},#{brandType},#{idenCode},#{engineNUm},#{registeredDate},#{issueDate},#{fileNum},#{loadNum},#{totalQuality},#{curbQuality},#{loadQuality},#{profileSize},#{tractionQuality},#{testRecord},#{barNum},#{remarks},#{commissionId},#{travelId},#{createTime},#{isMainTravel});
     </insert>
 
+    <select id="selectById" parameterType="long" resultType="Travel">
+        SELECT <include refid="column" /> FROM travel
+        <where>
+            travel_id=#{id}
+        </where>
+    </select>
+    <select id="selectByCommId" resultType="com.mxp.car.model.Travel">
+        SELECT <include refid="column" /> FROM travel
+        <where>
+            commission_id=#{commissionId}
+        </where>
+    </select>
+
+
 </mapper>

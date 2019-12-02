@@ -11,5 +11,5 @@ import java.util.Map;
  * TIME: 22:54
  */
 public interface CommissionService extends BaseService<Commission, Long> {
-    public int saveAll(Map<String,Map<String,String>> map);
+    int saveAll(Map<String,Map<String,String>> map);
 }

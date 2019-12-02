@@ -1,7 +1,14 @@
 package com.mxp.car.controller;
 
 import com.mxp.car.config.Config;
+import com.mxp.car.model.Car;
+import com.mxp.car.model.Commission;
+import com.mxp.car.model.DriverInfo;
+import com.mxp.car.model.Travel;
+import com.mxp.car.service.CarService;
 import com.mxp.car.service.CommissionService;
+import com.mxp.car.service.DriverService;
+import com.mxp.car.service.TravelService;
 import com.mxp.car.util.ResultRtn;
 import com.mxp.car.util.StatusCode;
 import lombok.extern.log4j.Log4j2;
@@ -11,8 +18,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.async.DeferredResult;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.logging.Handler;
 
 /**
  * EMAIL menxipeng@gmail.com
@@ -25,7 +35,15 @@ import java.util.concurrent.CompletableFuture;
 public class CommissionController {
 
     @Autowired
+    private Executor asyncExecutor;
+    @Autowired
     private CommissionService commissionService;
+    @Autowired
+    private CarService carService;
+    @Autowired
+    private DriverService driverService;
+    @Autowired
+    private TravelService travelService;
 
     @PostMapping("/addCom")
     public DeferredResult<ResultRtn> addCommission(@RequestBody Map<String,Map<String,String>> param){
@@ -40,11 +58,50 @@ public class CommissionController {
                 result.setResult(ResultRtn.of(StatusCode.ERROR));
             }
             return Config.SUCCESS;
-        }).orTimeout(Config.TIMEOUT_TIME,Config.TIME_UNIT).
+        },asyncExecutor).orTimeout(Config.TIMEOUT_TIME,Config.TIME_UNIT).
                 exceptionally(e -> {
                     log.error("-==插入委托单超时或发生异常==-",e);
                     result.setResult(ResultRtn.of(StatusCode.TIMEOUT_OR_ERROR));
                     return Config.ERROR;
+                });
+        return result;
+    }
+
+    @PostMapping("/details")
+    public DeferredResult<ResultRtn> details(@RequestBody Commission commission){
+        var result = new DeferredResult<ResultRtn>();
+        CompletableFuture.supplyAsync(() -> this.commissionService.findById(commission.getCommissionId())).thenCombineAsync(CompletableFuture.supplyAsync(() -> this.carService.findByCommId(commission.getCommissionId())),(commissions, carList) -> {
+            var map = new HashMap<String,Object>();
+            var mainCar = carList.stream().filter(car -> car.getIsMainCar() == 1).findAny().orElse(new Car());
+            var threeCar = carList.stream().filter(car -> car.getIsMainCar() == 2).findAny().orElse(new Car());
+            map.put("commission",commissions);
+            map.put("mainCar",mainCar);
+            map.put("threeCar",threeCar);
+            return map;
+        },asyncExecutor).thenCombineAsync(CompletableFuture.supplyAsync(() -> this.driverService.findByCommId(commission.getCommissionId())),(map, driverInfoList) -> {
+            var mainDriver = driverInfoList.stream().filter(driverInfo -> driverInfo.getIsMainDriver() == 1).findAny().orElse(new DriverInfo());
+            var threeDriver = driverInfoList.stream().filter(driverInfo -> driverInfo.getIsMainDriver() == 2).findAny().orElse(new DriverInfo());
+            map.put("mainDriver",mainDriver);
+            map.put("threeDriver",threeDriver);
+            return map;
+        },asyncExecutor).thenCombineAsync(CompletableFuture.supplyAsync(() -> this.travelService.findByCommId(commission.getCommissionId())),(map,travelList) -> {
+            var mainTravel = travelList.stream().filter(travel -> travel.getIsMainTravel() == 1).findAny().orElse(new Travel());
+            var threeTravel = travelList.stream().filter(travel -> travel.getIsMainTravel() == 2).findAny().orElse(new Travel());
+            map.put("mainTravel",mainTravel);
+            map.put("threeTravel",threeTravel);
+            return map;
+        },asyncExecutor).whenCompleteAsync((map, throwable) -> {
+            if (map == null){
+                result.setResult(ResultRtn.of(StatusCode.NULL_RESULT));
+            }else {
+                log.info("-==查看详情成功{}==-",map);
+                result.setResult(ResultRtn.of(StatusCode.SUCCESS,map));
+            }
+        },asyncExecutor).orTimeout(Config.TIMEOUT_TIME,Config.TIME_UNIT).
+                exceptionally(e -> {
+                    log.error("-==查看详情委托单超时或发生异常==-",e);
+                    result.setResult(ResultRtn.of(StatusCode.TIMEOUT_OR_ERROR));
+                    return null;
                 });
         return result;
     }

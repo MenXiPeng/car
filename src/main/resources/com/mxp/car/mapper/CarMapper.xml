@@ -23,4 +23,17 @@
         VALUES (#{carId},#{userId},#{commissionId},#{name},#{sex},#{ethnic},#{birthDate},#{address},#{idCar},#{organAuth},#{validityDate},#{photo},#{isMainCar},#{createTime});
     </insert>
 
+    <select id="selectById" parameterType="long" resultType="Car">
+        SELECT <include refid="column" /> FROM car_info
+        <where>
+            car_id=#{id}
+        </where>
+    </select>
+    <select id="selectByCommId" resultType="com.mxp.car.model.Car">
+        SELECT <include refid="column" /> FROM car_info
+        <where>
+            commission_id=#{commissionId}
+        </where>
+    </select>
+
 </mapper>

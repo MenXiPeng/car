@@ -24,4 +24,17 @@
         INSERT INTO driver_info(<include refid="column" />)
         VALUES (#{driverId},#{commissionId},#{name},#{sex},#{country},#{address},#{birthDate},#{firstDocDate},#{driveModel},#{validityDate},#{idCar},#{fileNum},#{record},#{remarks},#{isMainDriver},#{createTime})
     </insert>
+
+    <select id="selectById" parameterType="long" resultType="DriverInfo">
+        SELECT <include refid="column" /> FROM driver_info
+        <where>
+            driver_id=#{id}
+        </where>
+    </select>
+    <select id="selectByCommId" resultType="com.mxp.car.model.DriverInfo">
+        SELECT <include refid="column" /> FROM driver_info
+        <where>
+            commission_id=#{commissionId}
+        </where>
+    </select>
 </mapper>

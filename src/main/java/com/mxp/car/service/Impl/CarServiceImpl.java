@@ -7,6 +7,8 @@ import com.mxp.car.service.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * EMAIL menxipeng@gmail.com
  * AUTHOR:menxipeng
@@ -22,5 +24,10 @@ public class CarServiceImpl extends BaseServiceImpl<Car,Long> implements CarServ
     @Override
     public BaseMapper<Car, Long> getMapper() {
         return this.carMapper;
+    }
+
+    @Override
+    public List<Car> findByCommId(Long commissionId) {
+        return this.carMapper.selectByCommId(commissionId);
     }
 }
