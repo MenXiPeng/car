@@ -11,7 +11,7 @@
  Target Server Version : 50728
  File Encoding         : 65001
 
- Date: 25/11/2019 09:51:32
+ Date: 02/12/2019 10:51:30
 */
 
 SET NAMES utf8mb4;
@@ -38,7 +38,15 @@ CREATE TABLE `car_info` (
   `is_main_car` tinyint(2) NOT NULL COMMENT '是否是第三者1:主车，2:三者',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='车辆信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='车辆信息表';
+
+-- ----------------------------
+-- Records of car_info
+-- ----------------------------
+BEGIN;
+INSERT INTO `car_info` VALUES (29, 1912021043571649, 1, 1912021043575945, '法拉力', 0, '汉族', '1999-09-09', '地球', '001002003', '公安局', '2020-01-01', 'http://sss', 1, '2019-12-02 10:43:58');
+INSERT INTO `car_info` VALUES (30, 1912021043573252, 1, 1912021043575945, '小蹦蹦', 0, '回族', '2001-01-01', '火星', '200101010001', '银河系', '9999-01-01', 'http:/www', 2, '2019-12-02 10:43:58');
+COMMIT;
 
 -- ----------------------------
 -- Table structure for commission_info
@@ -62,18 +70,25 @@ CREATE TABLE `commission_info` (
   `payment_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '回款时间',
   `checkout_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '结账时间',
   `reminder_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '提醒时间',
-  `reminder Reminder reminder_content` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '提醒内容',
+  `reminder` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '提醒内容',
   `remarks` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '备注',
   `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='委托信息';
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='委托信息';
+
+-- ----------------------------
+-- Records of commission_info
+-- ----------------------------
+BEGIN;
+INSERT INTO `commission_info` VALUES (18, 1912021043575945, 1, '王洪亮', 'whl', '13843888888', 'BD0010001', '测试公司', '梁勇', '2019-12-01 11:11:11', 'BA001001', 1.12, 0, '王鑫', '2019-12-01 12:11:11', '2019-12-30 12:11:11', '2019-12-21 12:11:11', '该起床了', '吃喝拉撒睡', '2019-12-02 10:43:58');
+COMMIT;
 
 -- ----------------------------
 -- Table structure for driver_info
 -- ----------------------------
 DROP TABLE IF EXISTS `driver_info`;
 CREATE TABLE `driver_info` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `driver_id` bigint(50) NOT NULL COMMENT '驾驶证id',
   `commission_id` bigint(50) NOT NULL COMMENT '委托id',
   `name` varchar(24) COLLATE utf8mb4_bin NOT NULL COMMENT '姓名',
@@ -91,7 +106,15 @@ CREATE TABLE `driver_info` (
   `is_main_driver` tinyint(2) NOT NULL COMMENT '是否主车驾驶，1:主车2:三者',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='驾驶证信息';
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='驾驶证信息';
+
+-- ----------------------------
+-- Records of driver_info
+-- ----------------------------
+BEGIN;
+INSERT INTO `driver_info` VALUES (7, 1912021043573876, 1912021043575945, '乌啦啦', 0, '中国', '小山沟子', '1999-01-01', '2001-02-09', '法拉力', '2002-01-02', '2222009', '33333333', '深深的三口阿斯顿接口爱上', '时代大厦撒撒的', 1, '2019-12-02 10:43:58');
+INSERT INTO `driver_info` VALUES (8, 1912021043579497, 1912021043575945, '库期', 0, '美国', '大山沟子', '1882-09-18', '1999-01-01', '小蹦蹦', '2032-01-01', '888888', '22222', '反反复复', '反反复复是我', 2, '2019-12-02 10:43:58');
+COMMIT;
 
 -- ----------------------------
 -- Table structure for photo
@@ -130,16 +153,23 @@ CREATE TABLE `travel` (
   `load_quality` int(11) NOT NULL COMMENT '核定载质量',
   `profile_size` int(11) NOT NULL COMMENT '轮廓尺寸',
   `traction_quality` int(11) NOT NULL COMMENT '准牵引质量',
-  `test record
-test record
-test_record` varchar(50) COLLATE utf8mb4_bin NOT NULL COMMENT '校验记录',
+  `test_record` varchar(50) COLLATE utf8mb4_bin NOT NULL COMMENT '校验记录',
   `bar_num` varchar(50) COLLATE utf8mb4_bin NOT NULL COMMENT '条形号码',
   `remarks` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '备注',
   `commission_id` bigint(50) NOT NULL COMMENT '委托id',
   `travel_id` bigint(50) NOT NULL COMMENT '行驶证id',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `is_main_travel` tinyint(2) NOT NULL COMMENT '是否是主',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='行驶证表';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='行驶证表';
+
+-- ----------------------------
+-- Records of travel
+-- ----------------------------
+BEGIN;
+INSERT INTO `travel` VALUES (1, '22222', '不知', '对的', '多多岛', '问问我', '嗯嗯', '222222', '333333', '2001-01-01', '2001-01-02', '5555', 7777, 22, 33, 55, 111, 222, '33', '55555', '团团圆圆', 1912021043575945, 1912021043573720, '2019-12-02 10:43:58', 1);
+INSERT INTO `travel` VALUES (2, '33333', '不对的知', '对多多岛的', '多多多岛多岛', '问问多多岛我', '多多岛嗯嗯', '2222334422', '333333', '2001-03-01', '2001-04-02', '55555', 77767, 262, 353, 545, 5111, 2622, '3343', '555355', '团团4圆圆', 1912021043575945, 1912021043576567, '2019-12-02 10:43:58', 2);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for user
@@ -152,7 +182,7 @@ CREATE TABLE `user` (
   `username` varchar(50) COLLATE utf8mb4_bin NOT NULL COMMENT '用户名',
   `password` varchar(50) COLLATE utf8mb4_bin NOT NULL COMMENT '密码',
   `company` varchar(50) COLLATE utf8mb4_bin NOT NULL COMMENT '公司',
-  `photo` varchar(13) COLLATE utf8mb4_bin NOT NULL COMMENT '联系电话',
+  `phone` varchar(13) COLLATE utf8mb4_bin NOT NULL COMMENT '联系电话',
   `address` varchar(50) COLLATE utf8mb4_bin NOT NULL COMMENT '地址',
   `user_id` bigint(20) NOT NULL COMMENT '用户id，用来绑定修理单',
   PRIMARY KEY (`id`)
