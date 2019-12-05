@@ -3,7 +3,6 @@ package com.mxp.car.service.Impl;
 import com.mxp.car.mapper.BaseMapper;
 import com.mxp.car.mapper.DriverInfoMapper;
 import com.mxp.car.model.DriverInfo;
-import com.mxp.car.service.BaseService;
 import com.mxp.car.service.DriverService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

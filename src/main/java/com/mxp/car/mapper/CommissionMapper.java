@@ -11,5 +11,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface CommissionMapper extends BaseMapper<Commission,Long> {
-
+    int updateById(Commission commission);
 }

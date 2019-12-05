@@ -58,4 +58,8 @@
         </where>
     </select>
 
+    <update id="updateById" parameterType="Commission">
+
+    </update>
+
 </mapper>

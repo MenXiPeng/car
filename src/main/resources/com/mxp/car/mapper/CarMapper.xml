@@ -36,4 +36,11 @@
         </where>
     </select>
 
+    <update id="updateByCommId" parameterType="Car">
+        UPDATE car_info
+        <trim prefix="SET" suffixOverrides=",">
+
+        </trim>
+    </update>
+
 </mapper>

@@ -14,4 +14,5 @@ import java.util.List;
 @Mapper
 public interface CarMapper extends BaseMapper<Car,Long> {
     List<Car> selectByCommId(Long commissionId);
+    int updateByCommId(Car car);
 }

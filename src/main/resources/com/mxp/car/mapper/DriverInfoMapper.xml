@@ -37,4 +37,8 @@
             commission_id=#{commissionId}
         </where>
     </select>
+
+    <update id="updateByCommId" parameterType="DriverInfo">
+
+    </update>
 </mapper>
