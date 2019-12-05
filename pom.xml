@@ -84,7 +84,10 @@
             <artifactId>log4j-web</artifactId>
             <version>${log4j.web.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
         <!-- PageHelper -->
         <dependency>
             <groupId>com.github.pagehelper</groupId>
@@ -96,6 +99,11 @@
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
             <version>1.9.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.61</version>
         </dependency>
 
     </dependencies>

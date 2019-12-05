@@ -1,11 +1,11 @@
 package com.mxp.car.util;
 
+import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.aspectj.weaver.Utils;
 
 import java.util.List;
 
@@ -31,6 +31,10 @@ public class ResultRtn<T> {
         result.setMsg(statusCode.msg);
         result.setDataList(List.of(t));
         return result;
+    }
+
+    public String toJsonString() {
+        return JSON.toJSONString(this);
     }
 
 //    @Override
