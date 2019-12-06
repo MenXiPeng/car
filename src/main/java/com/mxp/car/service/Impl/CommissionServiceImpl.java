@@ -119,4 +119,79 @@ public class CommissionServiceImpl extends BaseServiceImpl<Commission,Long>  imp
         }
         return 0;
     }
+
+    @Override
+    public int updateAll(Map<String, Map<String, String>> map) {
+        var comMap = Utils.CarUtil.mapTo(map.get("commission"));
+        var mainCar = Utils.CarUtil.mapTo(map.get("mainCar"));
+        var threeCarMap = Utils.CarUtil.mapTo(map.get("threeCar"));
+        var mainDriver = Utils.CarUtil.mapTo(map.get("mainDriver"));
+        var threeDriver = Utils.CarUtil.mapTo(map.get("threeDriver"));
+        var mainTravel = Utils.CarUtil.mapTo(map.get("mainTravel"));
+        var threeTravel = Utils.CarUtil.mapTo(map.get("threeTravel"));
+        var commissionId = comMap.get("commissionId");
+        var commission = new Commission();
+        var isCar = new Car();
+        var isDriverInfo = new DriverInfo();
+        var isTravel = new Travel();
+        try {
+            var usrId = 1L;
+            comMap.put("commissionId",commissionId);
+            BeanUtils.populate(commission, comMap);
+            log.info(commission);
+            var com = this.commissionMapper.updateById(commission);
+            // 主车
+            mainCar.put("commissionId",commissionId);
+            BeanUtils.populate(isCar,mainCar);
+            log.info(isCar);
+            var car1 = this.carMapper.updateByCommId(isCar);
+            // 三车
+            threeCarMap.put("commissionId",commissionId);
+            BeanUtils.populate(isCar,threeCarMap);
+            log.info(isCar);
+            var car2 = this.carMapper.updateByCommId(isCar);
+            // 主车驾驶证
+            mainDriver.put("commissionId",commissionId);
+            BeanUtils.populate(isDriverInfo,mainDriver);
+            log.info(isDriverInfo);
+            var d1 = this.driverInfoMapper.updateByCommId(isDriverInfo);
+            // 三车驾驶证
+            threeDriver.put("commissionId",commissionId);
+            BeanUtils.populate(isDriverInfo,threeDriver);
+            log.info(isDriverInfo);
+            var d2 = this.driverInfoMapper.updateByCommId(isDriverInfo);
+            // 主车行驶证
+            mainTravel.put("commissionId",commissionId);
+            BeanUtils.populate(isTravel,mainTravel);
+            log.info(isTravel);
+            var t1 = this.travelMapper.updateByCommId(isTravel);
+            // 三车行驶证
+            threeTravel.put("commissionId",commissionId);
+            BeanUtils.populate(isTravel,threeTravel);
+            log.info(isTravel);
+            var t2= this.travelMapper.updateByCommId(isTravel);
+            if (com > 0 && car1 > 0 && car2 > 0 && d1 > 0 && d2 > 0 && t1 > 0 && t2 > 0){
+                return 1;
+            }else {
+                return 0;
+            }
+        } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            log.error("-==修改异常回滚数据==-",e);
+        }
+        return 0;
+    }
+
+    @Override
+    public int deleteAll(Long commissionId) {
+        var com =this.commissionMapper.deleteById(commissionId);
+        var car  = this.carMapper.deleteByCommId(commissionId);
+        var driver = this.driverInfoMapper.deleteByCommId(commissionId);
+        var travel = this.travelMapper.deleteByCommId(commissionId);
+        if (com > 0 && car > 0  && driver > 0 && travel > 0){
+            return 1;
+        }else {
+            return 0;
+        }
+    }
 }

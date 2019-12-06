@@ -29,7 +29,7 @@
     </sql>
 
     <insert id="insert" parameterType="Travel">
-        INSERT INTO travel(<include refid="column" />) VALUES (#{carNum},#{carType},#{owner},#{address},#{useType},#{brandType},#{idenCode},#{engineNUm},#{registeredDate},#{issueDate},#{fileNum},#{loadNum},#{totalQuality},#{curbQuality},#{loadQuality},#{profileSize},#{tractionQuality},#{testRecord},#{barNum},#{remarks},#{commissionId},#{travelId},#{createTime},#{isMainTravel});
+        INSERT INTO travel(<include refid="column" />) VALUES (#{carNum},#{carType},#{owner},#{address},#{useType},#{brandType},#{idenCode},#{engineNum},#{registeredDate},#{issueDate},#{fileNum},#{loadNum},#{totalQuality},#{curbQuality},#{loadQuality},#{profileSize},#{tractionQuality},#{testRecord},#{barNum},#{remarks},#{commissionId},#{travelId},#{createTime},#{isMainTravel});
     </insert>
 
     <select id="selectById" parameterType="long" resultType="Travel">
@@ -46,8 +46,95 @@
     </select>
 
     <update id="updateByCommId" parameterType="Travel">
-
+        UPDATE travel
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="carNum != null and carNum != ''">
+                car_num=#{carNum} ,
+            </if>
+            <if test="carType != null and carType != ''">
+                car_type=#{carType} ,
+            </if>
+            <if test="owner != null and owner != ''">
+                owner=#{owner} ,
+            </if>
+            <if test="address != null and address != ''">
+                address=#{address} ,
+            </if>
+            <if test="useType != null and useType != ''">
+                use_type=#{useType} ,
+            </if>
+            <if test="brandType != null and brandType != ''">
+                brand_type=#{brandType} ,
+            </if>
+            <if test="idenCode != null and idenCode != ''">
+                iden_code=#{idenCode} ,
+            </if>
+            <if test="engineNum != null and engineNum != ''">
+                engine_num=#{engineNum} ,
+            </if>
+            <if test="registeredDate != null">
+                registered_date=#{registeredDate} ,
+            </if>
+            <if test="issueDate != null">
+                issue_date=#{issueDate} ,
+            </if>
+            <if test="fileNum != null and fileNum != ''">
+                file_num=#{fileNum} ,
+            </if>
+            <if test="loadNum != null and loadNum != ''">
+                load_num=#{loadNum} ,
+            </if>
+            <if test="totalQuality != null">
+                total_quality=#{totalQuality} ,
+            </if>
+            <if test="curbQuality != null">
+                curb_quality=#{curbQuality} ,
+            </if>
+            <if test="loadQuality != null">
+                load_quality=#{loadQuality} ,
+            </if>
+            <if test="profileSize != null">
+                profile_size=#{profileSize} ,
+            </if>
+            <if test="tractionQuality != null">
+            traction_quality=#{tractionQuality} ,
+            </if>
+            <if test="testRecord != null and testRecord != ''">
+                test_record=#{testRecord} ,
+            </if>
+            <if test="barNum != null and barNum != ''">
+                bar_num=#{barNum} ,
+            </if>
+            <if test="remarks != null and remarks != ''">
+                remarks=#{remarks} ,
+            </if>
+            <if test="commissionId != null">
+                commission_id=#{commissionId} ,
+            </if>
+            <if test="createTime != null">
+                create_time=#{createTime} ,
+            </if>
+            <if test="isMainTravel != null">
+                is_main_travel=#{isMainTravel}
+            </if>
+        </trim>
+        <where>
+            commission_id=#{commissionId}
+        </where>
     </update>
 
+    <delete id="deleteById" parameterType="long" >
+        DELETE FROM travel
+        <where>
+            travel_id=#{id}
+        </where>
+    </delete>
+
+    <delete id="deleteByCommId" parameterType="long">
+        DELETE FROM travel
+        <where>
+            commission_id=#{commissionId}
+        </where>
+    </delete>
 
 </mapper>

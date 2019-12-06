@@ -67,6 +67,42 @@ public class CommissionController {
         return result;
     }
 
+    @PostMapping("/modifyCom")
+    public DeferredResult<ResultRtn> modifyCommission(@RequestBody Map<String,Map<String,String>> param){
+        var result = new DeferredResult<ResultRtn>();
+        CompletableFuture.supplyAsync(() -> {
+            var status = commissionService.updateAll(param);
+            if (status > 0){
+                log.info("-==修改委托单成功==-");
+                result.setResult(ResultRtn.of(StatusCode.SUCCESS));
+            }else {
+                log.warn("-==修改委托单失败==-");
+                result.setResult(ResultRtn.of(StatusCode.ERROR));
+            }
+            return Config.SUCCESS;
+        },asyncExecutor).orTimeout(Config.TIMEOUT_TIME,Config.TIME_UNIT).
+                exceptionally(e -> {
+                    log.error("-==修改委托单超时或发生异常==-",e);
+                    result.setResult(ResultRtn.of(StatusCode.TIMEOUT_OR_ERROR));
+                    return Config.ERROR;
+                });
+        return result;
+    }
+
+    @PostMapping("/deleteCom")
+    public DeferredResult<ResultRtn> deleteCom(@RequestBody Commission commission){
+        var result = new DeferredResult<ResultRtn>();
+        var status = commissionService.deleteAll(commission.getCommissionId());
+        if (status > 0){
+            log.info("-==删除委托单成功==-");
+            result.setResult(ResultRtn.of(StatusCode.SUCCESS));
+        }else {
+            log.warn("-==删除委托单失败==-");
+            result.setResult(ResultRtn.of(StatusCode.ERROR));
+        }
+        return result;
+    }
+
     @PostMapping("/details")
     public DeferredResult<ResultRtn> details(@RequestBody Commission commission){
         var result = new DeferredResult<ResultRtn>();

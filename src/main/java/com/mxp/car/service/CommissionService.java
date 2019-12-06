@@ -12,4 +12,6 @@ import java.util.Map;
  */
 public interface CommissionService extends BaseService<Commission, Long> {
     int saveAll(Map<String,Map<String,String>> map);
+    int updateAll(Map<String,Map<String,String>> map);
+    int deleteAll(Long commissionId);
 }

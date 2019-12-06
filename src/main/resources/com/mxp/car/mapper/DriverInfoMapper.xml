@@ -39,6 +39,67 @@
     </select>
 
     <update id="updateByCommId" parameterType="DriverInfo">
-
+        UPDATE driver_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">
+                name=#{name} ,
+            </if>
+            <if test="sex != null">
+                sex=#{sex} ,
+            </if>
+            <if test="country != null and country != ''">
+                country=#{country},
+            </if>
+            <if test="address != null and address != ''">
+                address=#{address} ,
+            </if>
+            <if test="birthDate != null">
+                birth=#{birthDate} ,
+            </if>
+            <if test="firstDocDate != null">
+                first_doc_time=#{firstDocDate} ,
+            </if>
+            <if test="driveModel != null and driveModel != ''">
+                drive_model=#{driveModel} ,
+            </if>
+            <if test="validityDate != null">
+                validity=#{validityDate} ,
+            </if>
+            <if test="idCar != null and idCar != ''">
+                id_car=#{idCar} ,
+            </if>
+            <if test="fileNum != null and fileNum != ''">
+                file_num=#{fileNum} ,
+            </if>
+            <if test="record != null and record != ''">
+                record=#{record} ,
+            </if>
+            <if test="remarks != null and remarks != ''">
+                remarks=#{remarks} ,
+            </if>
+            <if test="isMainDriver != null">
+                is_main_driver=#{isMainDriver} ,
+            </if>
+            <if test="createTime != null">
+                create_time=#{createTime}
+            </if>
+        </trim>
+        <where>
+            commission_id=#{commissionId}
+        </where>
     </update>
+
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM driver_info
+        <where>
+            driver_id=#{id}
+        </where>
+    </delete>
+
+    <delete id="deleteByCommId" parameterType="long">
+        DELETE FROM driver_info
+        <where>
+            commission_id=#{commissionId}
+        </where>
+    </delete>
 </mapper>

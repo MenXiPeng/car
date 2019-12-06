@@ -32,7 +32,7 @@ public class Travel {
     private String useType;
     private String brandType;
     private String idenCode;
-    private String engineNUm;
+    private String engineNum;
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)

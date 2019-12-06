@@ -59,7 +59,70 @@
     </select>
 
     <update id="updateById" parameterType="Commission">
-
+        UPDATE commission_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="principal != null and principal != ''">
+                principal=#{principal} ,
+            </if>
+            <if test="contact != null and contact != ''">
+                contact=#{contact} ,
+            </if>
+            <if test="phone != null and phone != ''">
+                phone=#{phone} ,
+            </if>
+            <if test="policyNum != null and policyNum != ''">
+                policy_num=#{policyNum} ,
+            </if>
+            <if test="company != null and company != ''">
+                company=#{company} ,
+            </if>
+            <if test="insured != null and insured != ''">
+                insured=#{insured} ,
+            </if>
+            <if test="riskTime != null">
+                risk_time=#{riskTime} ,
+            </if>
+            <if test="reportNum != null and reportNum != ''">
+                report_num=#{reportNum} ,
+            </if>
+            <if test="damageAmount != null">
+                damage_amount=#{damageAmount} ,
+            </if>
+            <if test="discount != null">
+                discount=#{discount} ,
+            </if>
+            <if test="salesman != null and salesman != ''">
+                salesman=#{salesman} ,
+            </if>
+            <if test="paymentTime != null">
+                payment_time=#{paymentTime} ,
+            </if>
+            <if test="checkoutTime != null">
+                checkout_time=#{checkoutTime} ,
+            </if>
+            <if test="reminderTime != null">
+                reminder_time=#{reminderTime} ,
+            </if>
+            <if test="createTime != null">
+                create_time=#{createTime} ,
+            </if>
+            <if test="reminder != null and reminder != ''">
+                reminder=#{reminder} ,
+            </if>
+            <if test="remarks != null and remarks != ''">
+                remarks=#{remarks}
+            </if>
+        </trim>
+        <where>
+            commission_id=#{commissionId}
+        </where>
     </update>
+
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM commission_info
+        <where>
+            commission_id=#{id}
+        </where>
+    </delete>
 
 </mapper>
