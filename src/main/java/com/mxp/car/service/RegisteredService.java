@@ -4,5 +4,5 @@ import java.util.Map;
 
 public interface RegisteredService extends BaseService {
 
-    Map<String ,String> getPasswordAndMachineCode(String password, String uuid);
+    Map<String ,String> getPasswordAndMachineCode(Map<String, String> paramMap);
 }

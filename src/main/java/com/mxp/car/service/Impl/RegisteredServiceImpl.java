@@ -4,6 +4,7 @@ import com.mxp.car.mapper.BaseMapper;
 import com.mxp.car.mapper.UserMapper;
 import com.mxp.car.model.User;
 import com.mxp.car.service.RegisteredService;
+import com.mxp.car.util.Utils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,10 +12,8 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Scanner;
 
 @Log4j2
 @Service
@@ -24,7 +23,7 @@ public class RegisteredServiceImpl extends BaseServiceImpl implements Registered
     private UserMapper userMapper;
 
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Value("${uuid}")
     private String configUUID;
@@ -35,21 +34,24 @@ public class RegisteredServiceImpl extends BaseServiceImpl implements Registered
     }
 
     @Override
-    public Map<String, String> getPasswordAndMachineCode(String password, String uuid) {
+    public Map<String, String> getPasswordAndMachineCode(Map<String, String> paramMap) {
         Map<String, String> result = new LinkedHashMap<>();
-        if (configUUID.equals(uuid)) {
-            result.put("password", passwordEncoder.encode(password));
-            try {
-                Process process = Runtime.getRuntime().exec(new String[]{"wmic", "cpu", "get", "ProcessorId"});
-                process.getOutputStream().close();
-                Scanner sc = new Scanner(process.getInputStream());
-                String property = sc.next();
-                String serial = sc.next();
-                log.info("{}:{}", password, serial);
-                result.put("machine", serial);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        if (configUUID.equals(paramMap.get("uuidKey"))) {
+            result.put("password", bCryptPasswordEncoder.encode(paramMap.get("password")));
+            result.put("username", paramMap.get("username"));
+            String machine = Utils.CarUtil.getMachine();
+            log.info("{}:{}", paramMap.get("password"), machine);
+            result.put("machine", machine);
+            User user = new User();
+            user.setName("");
+            user.setVerification(result.get("machine"));
+            user.setUsername(result.get("username"));
+            user.setPassword(result.get("password"));
+            user.setCompany("");
+            user.setPhone("");
+            user.setAddress("");
+            user.setUserId(1L);
+            userMapper.insert(user);
         }
         return result;
     }
