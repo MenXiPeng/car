@@ -1,9 +1,9 @@
 package com.mxp.car.service.Impl;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.mxp.car.mapper.BaseMapper;
 import com.mxp.car.service.BaseService;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;

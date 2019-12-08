@@ -25,7 +25,12 @@ public enum StatusCode {
     STATION_ERROR(70010,"站点信息错误"),
     DECRYPTION_ERROR(90010,"加密方式错误"),
     PARAMETER_ERROR(10012,"兑奖票面码为空"),
-    TIMOUT_ERROR(10230,"超时"),;
+    TIMOUT_ERROR(10230,"超时"),
+    UPLOAD_SUCCESS(80100,"上传成功"),
+    UPLOAD_NONAME(80200,"上传文件名不能为空"),
+    UPLOAD_NO_PATH(80400,"上传路径无法找到"),
+    UPLOAD_NO_FILE(80500,"上传文件为空"),
+    UPLOAD_ERROR(89999,"上传失败");
      
 
     public int code;

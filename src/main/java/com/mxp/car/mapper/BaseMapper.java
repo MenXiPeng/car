@@ -1,7 +1,7 @@
 package com.mxp.car.mapper;
 
+import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.data.domain.Page;
 
 import java.io.Serializable;
 import java.util.List;

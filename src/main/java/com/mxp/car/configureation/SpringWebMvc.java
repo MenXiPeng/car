@@ -1,25 +1,31 @@
 package com.mxp.car.configureation;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
+import org.springframework.boot.web.server.ErrorPage;
+import org.springframework.boot.web.server.ErrorPageRegistrar;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpOutputMessage;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.HttpMessageNotWritableException;
-import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.util.StreamUtils;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,18 +40,29 @@ import java.util.Optional;
 public class SpringWebMvc implements WebMvcConfigurer {
 
     @Autowired
+    private HandlerInterceptor timeInterceptor;
+    @Autowired
     private MappingJackson2HttpMessageConverter converter;
 
     @Override
-    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        converter.setSupportedMediaTypes(new LinkedList<>() {{
-            add(MediaType.TEXT_HTML);
-            add(MediaType.APPLICATION_JSON_UTF8);
-        }});
-        converters.add(new StringHttpMessageConverter());
-        converters.add(converter);
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(timeInterceptor).addPathPatterns("/**");
     }
 
+    @Override
+    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        var objectMapper = new ObjectMapper();
+        var simpleModule = new SimpleModule();
+
+        simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
+        simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
+        simpleModule.addSerializer(BigInteger.class, ToStringSerializer.instance);
+
+        objectMapper.registerModule(simpleModule);
+        converter.setObjectMapper(objectMapper);
+
+        converters.add(0, converter);
+    }
 
     @Bean
     public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
@@ -70,4 +87,10 @@ public class SpringWebMvc implements WebMvcConfigurer {
         configurer.setProperties(yaml.getObject());
         return configurer;
     }
+
+    @Bean
+    public ErrorPageRegistrar errorPageRegistrar() {
+        return registry -> registry.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/index.html"));
+    }
+
 }

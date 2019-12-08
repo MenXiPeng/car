@@ -12,7 +12,8 @@
         car_info.address,
         car_info.id_car,
         car_info.organ_auth,
-        car_info.validity,
+        car_info.begin_validity,
+        car_info.end_validity,
         car_info.phone,
         car_info.is_main_car,
         car_info.create_time
@@ -20,7 +21,7 @@
 
     <insert id="insert" parameterType="Car">
        INSERT INTO car_info(<include refid="column" />)
-        VALUES (#{carId},#{userId},#{commissionId},#{name},#{sex},#{ethnic},#{birthDate},#{address},#{idCar},#{organAuth},#{validityDate},#{photo},#{isMainCar},#{createTime});
+        VALUES (#{carId},#{userId},#{commissionId},#{name},#{sex},#{ethnic},#{birthDate},#{address},#{idCar},#{organAuth},#{beginValidityDate},#{endValidityDate},#{photo},#{isMainCar},#{createTime});
     </insert>
 
     <select id="selectById" parameterType="long" resultType="Car">
@@ -60,8 +61,11 @@
             <if test="organAuth != null and organAuth != ''">
                 organ_auth=#{organAuth} ,
             </if>
-            <if test="validityDate != null">
-                validity=#{validityDate} ,
+            <if test="beginValidityDate != null and endValidityDate != null ">
+                begin_validity=#{beginValidityDate} ,
+            </if>
+            <if test="beginValidityDate != null and endValidityDate != null ">
+                end_validity=#{endValidityDate} ,
             </if>
             <if test="photo != null and photo != ''">
                 phone=#{photo} ,

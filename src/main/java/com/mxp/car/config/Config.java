@@ -19,6 +19,8 @@ import java.util.concurrent.TimeUnit;
 @PropertySource("classpath:config.yml")
 public class Config implements InitializingBean {
 
+    @Value("${upload.path}")
+    private String uploadPath;
     @Value("${request.timeout}")
     private long timeout;
 
@@ -28,10 +30,12 @@ public class Config implements InitializingBean {
     public static final String ERROR = "Error";
 
     public static long TIMEOUT_TIME;
+    public static String UPLOAD_PATH;
 
 
     @Override
     public void afterPropertiesSet() {
         TIMEOUT_TIME = this.timeout;
+        UPLOAD_PATH=this.uploadPath;
     }
 }

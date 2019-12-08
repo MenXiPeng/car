@@ -11,17 +11,18 @@
         commission_info.policy_num,
         commission_info.company,
         commission_info.insured,
-        commission_info.risk_time,
+        commission_info.risk_date,
         commission_info.report_num,
         commission_info.damage_amount,
         commission_info.discount,
         commission_info.salesman,
-        commission_info.payment_time,
-        commission_info.checkout_time,
+        commission_info.payment_date,
+        commission_info.checkout_date,
         commission_info.reminder_time,
         commission_info.create_time,
         commission_info.reminder,
-        commission_info.remarks
+        commission_info.remarks,
+        commission_info.direct
     </sql>
 
     <insert id="insert" parameterType="Commission">
@@ -34,21 +35,46 @@
         #{policyNum},
         #{company},
         #{insured},
-        #{riskTime},
+        #{riskDate},
         #{reportNum},
         #{damageAmount},
         #{discount},
         #{salesman},
-        #{paymentTime},
-        #{checkoutTime},
+        #{paymentDate},
+        #{checkoutDate},
         #{reminderTime},
         #{createTime},
         #{reminder},
-        #{remarks});
+        #{remarks},#{direct});
     </insert>
 
-    <select id="selectMapByPage" parameterType="map" resultType="map">
-
+    <select id="selectListByPage" parameterType="Map" resultType="Commission">
+        SELECT
+        com.commission_id as commissionId,
+        com.user_id as userId,
+        com.principal as principal,
+        com.contact as contact,
+        com.phone as phone,
+        com.policy_num as policyNum,
+        com.company as company,
+        com.insured as insured,
+        com.risk_date as riskDate,
+        com.report_num as reportNum,
+        com.damage_amount as damageAmount,
+        com.discount as discount,
+        com.salesman as salesman,
+        com.payment_date as paymentDate,
+        com.checkout_date as checkoutDate,
+        com.reminder_time as reminderTime,
+        com.create_time as createTime,
+        com.reminder as reminder,
+        com.remarks as remarks,
+        com.direct as direct
+<!--        tra.car_num,-->
+<!--        tra.car_type-->
+        FROM commission_info com
+<!--        LEFT JOIN-->
+<!--        travel tra ON com.commission_id=tra.commission_id-->
     </select>
 
     <select id="selectById" parameterType="long" resultType="Commission">
@@ -79,8 +105,8 @@
             <if test="insured != null and insured != ''">
                 insured=#{insured} ,
             </if>
-            <if test="riskTime != null">
-                risk_time=#{riskTime} ,
+            <if test="riskDate != null">
+                risk_date=#{riskDate} ,
             </if>
             <if test="reportNum != null and reportNum != ''">
                 report_num=#{reportNum} ,
@@ -94,11 +120,11 @@
             <if test="salesman != null and salesman != ''">
                 salesman=#{salesman} ,
             </if>
-            <if test="paymentTime != null">
-                payment_time=#{paymentTime} ,
+            <if test="paymentDate != null">
+                payment_date=#{paymentDate} ,
             </if>
-            <if test="checkoutTime != null">
-                checkout_time=#{checkoutTime} ,
+            <if test="checkoutDate != null">
+                checkout_date=#{checkoutDate} ,
             </if>
             <if test="reminderTime != null">
                 reminder_time=#{reminderTime} ,

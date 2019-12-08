@@ -2,10 +2,7 @@ package com.mxp.car.util;
 
 import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -37,8 +34,16 @@ public class ResultRtn<T> {
         return JSON.toJSONString(this);
     }
 
-//    @Override
-//    public String toString() {
-//        return Utils.JSONUtils.objectToJson(this);
-//    }
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class PageInfo {
+
+        private final int pageNum;
+        private final int pageSize;
+        private final long total;
+
+        public static PageInfo of(int pageNum, int pageSize, long total) {
+            return new PageInfo(pageNum, pageSize, total);
+        }
+    }
 }

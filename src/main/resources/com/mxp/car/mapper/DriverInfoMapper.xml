@@ -11,7 +11,8 @@
         driver_info.birth,
         driver_info.first_doc_time,
         driver_info.drive_model,
-        driver_info.validity,
+        driver_info.begin_validity,
+        driver_info.end_validity,
         driver_info.id_car,
         driver_info.file_num,
         driver_info.record,
@@ -22,7 +23,7 @@
 
     <insert id="insert" parameterType="DriverInfo">
         INSERT INTO driver_info(<include refid="column" />)
-        VALUES (#{driverId},#{commissionId},#{name},#{sex},#{country},#{address},#{birthDate},#{firstDocDate},#{driveModel},#{validityDate},#{idCar},#{fileNum},#{record},#{remarks},#{isMainDriver},#{createTime})
+        VALUES (#{driverId},#{commissionId},#{name},#{sex},#{country},#{address},#{birthDate},#{firstDocDate},#{driveModel},#{beginValidityDate},#{endValidityDate},#{idCar},#{fileNum},#{record},#{remarks},#{isMainDriver},#{createTime})
     </insert>
 
     <select id="selectById" parameterType="long" resultType="DriverInfo">
@@ -62,8 +63,11 @@
             <if test="driveModel != null and driveModel != ''">
                 drive_model=#{driveModel} ,
             </if>
-            <if test="validityDate != null">
-                validity=#{validityDate} ,
+            <if test="beginValidityDate != null and endValidityDate != null ">
+                begin_validity=#{beginValidityDate} ,
+            </if>
+            <if test="beginValidityDate != null and endValidityDate != null ">
+                end_validity=#{endValidityDate} ,
             </if>
             <if test="idCar != null and idCar != ''">
                 id_car=#{idCar} ,
