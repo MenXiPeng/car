@@ -3,6 +3,7 @@ package com.mxp.car.util;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -10,6 +11,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
@@ -74,6 +76,10 @@ public class Utils {
                 e.printStackTrace();
             }
             return result;
+        }
+
+        public static void main(String[] args) {
+            
         }
     }
 }

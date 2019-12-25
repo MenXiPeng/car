@@ -48,33 +48,66 @@
         #{remarks},#{direct});
     </insert>
 
-    <select id="selectListByPage" parameterType="Map" resultType="Commission">
+    <select id="selectListByPage" parameterType="Map" resultType="Map">
         SELECT
-        com.commission_id as commissionId,
-        com.user_id as userId,
-        com.principal as principal,
-        com.contact as contact,
-        com.phone as phone,
-        com.policy_num as policyNum,
-        com.company as company,
-        com.insured as insured,
-        com.risk_date as riskDate,
-        com.report_num as reportNum,
-        com.damage_amount as damageAmount,
-        com.discount as discount,
-        com.salesman as salesman,
-        com.payment_date as paymentDate,
-        com.checkout_date as checkoutDate,
-        com.reminder_time as reminderTime,
-        com.create_time as createTime,
-        com.reminder as reminder,
-        com.remarks as remarks,
-        com.direct as direct
-<!--        tra.car_num,-->
-<!--        tra.car_type-->
+        com.commission_id AS commissionId,
+        com.user_id AS userId,
+        com.principal AS principal,
+        com.contact AS contact,
+        com.phone AS phone,
+        com.policy_num AS policyNum,
+        com.company AS company,
+        com.insured AS insured,
+        DATE_FORMAT(com.risk_date, '%Y-%m-%d') AS riskDate,
+        com.report_num AS reportNum,
+        com.damage_amount AS damageAmount,
+        com.discount AS discount,
+        com.salesman AS salesman,
+        DATE_FORMAT(com.payment_date, '%Y-%m-%d') AS paymentDate,
+        DATE_FORMAT(com.checkout_date, '%Y-%m-%d') AS checkoutDate,
+        DATE_FORMAT(com.reminder_time, '%Y-%m-%d %H:%i:%S') AS reminderTime,
+        DATE_FORMAT(com.create_time, '%Y-%m-%d %H:%i:%S') AS createTime,
+        com.reminder AS reminder,
+        com.remarks AS remarks,
+        com.direct AS direct,
+        tra.car_num AS carNum,
+        tra.car_type AS carType
         FROM commission_info com
-<!--        LEFT JOIN-->
-<!--        travel tra ON com.commission_id=tra.commission_id-->
+        LEFT JOIN
+        travel tra ON com.commission_id=tra.commission_id
+        <trim prefix="WHERE" suffixOverrides="AND|OR">
+            <if test="param.riskDate != null and param.riskDate != '' ">
+                com.risk_date=#{param.riskDate} AND
+            </if>
+            <if test="param.principal != null and param.principal != '' ">
+                com.principal=#{param.principal} AND
+            </if>
+            <if test="param.company != null and param.company != '' ">
+                com.company=#{param.company} AND
+            </if>
+            <if test="param.insured != null and param.insured != '' ">
+                com.insured=#{param.insured} AND
+            </if>
+            <if test="param.carNum != null and param.carNum != '' ">
+                tra.car_num=#{param.carNum} AND
+            </if>
+            <if test="param.reportNum != null and param.reportNum != '' ">
+                com.report_num=#{reportNum} AND
+            </if>
+            <if test="param.damageAmount != null and param.damageAmount != '' ">
+                com.damage_amount=#{param.damageAmount} AND
+            </if>
+            <if test="param.paymentDate != null and param.paymentDate != '' ">
+                com.payment_date=#{paymentDate} AND
+            </if>
+            <if test="param.isPayment != null and param.isPayment == 1 ">
+                com.payment_date != null AND
+            </if>
+            <if test="param.checkoutDate != null  and aram.checkoutDate != '' ">
+                checkout_date=#{param.checkoutDate} AND
+            </if>
+            tra.is_main_travel=1
+        </trim>
     </select>
 
     <select id="selectById" parameterType="long" resultType="Commission">
@@ -150,5 +183,4 @@
             commission_id=#{id}
         </where>
     </delete>
-
 </mapper>

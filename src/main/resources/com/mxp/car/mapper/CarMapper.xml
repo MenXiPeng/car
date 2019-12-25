@@ -21,7 +21,7 @@
 
     <insert id="insert" parameterType="Car">
        INSERT INTO car_info(<include refid="column" />)
-        VALUES (#{carId},#{userId},#{commissionId},#{name},#{sex},#{ethnic},#{birthDate},#{address},#{idCar},#{organAuth},#{beginValidityDate},#{endValidityDate},#{photo},#{isMainCar},#{createTime});
+        VALUES (#{carId},#{userId},#{commissionId},#{name},#{sex},#{ethnic},#{birthDate},#{address},#{idCar},#{organAuth},#{beginValidityDate},#{endValidityDate},#{phone},#{isMainCar},#{createTime});
     </insert>
 
     <select id="selectById" parameterType="long" resultType="Car">
@@ -67,8 +67,8 @@
             <if test="beginValidityDate != null and endValidityDate != null ">
                 end_validity=#{endValidityDate} ,
             </if>
-            <if test="photo != null and photo != ''">
-                phone=#{photo} ,
+            <if test="phone != null and phone != ''">
+                phone=#{phone} ,
             </if>
             <if test="isMainCar != null">
                 is_main_car=#{isMainCar} ,

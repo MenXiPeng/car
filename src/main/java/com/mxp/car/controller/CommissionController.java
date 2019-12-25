@@ -20,11 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.async.DeferredResult;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
-import java.util.logging.Handler;
 
 /**
  * EMAIL menxipeng@gmail.com
@@ -153,7 +151,7 @@ public class CommissionController {
             map.put("threeTravel",threeTravel);
             return map;
         },asyncExecutor).whenCompleteAsync((map, throwable) -> {
-            if (map == null){
+            if (map.isEmpty()){
                 result.setResult(ResultRtn.of(StatusCode.NULL_RESULT));
             }else {
                 log.info("-==查看详情成功{}==-",map);
@@ -166,12 +164,6 @@ public class CommissionController {
                     return null;
                 });
         return result;
-    }
-
-    @PostMapping("/test")
-    public String demo(@RequestBody String sss){
-        System.out.println(sss);
-        return "success";
     }
 
 }
