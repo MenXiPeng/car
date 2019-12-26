@@ -134,7 +134,7 @@ public class CommissionController {
             var map = new HashMap<String,Object>();
             var mainCar = carList.stream().filter(car -> car.getIsMainCar() == 1).findAny().orElse(new Car());
             var threeCar = carList.stream().filter(car -> car.getIsMainCar() == 2).findAny().orElse(new Car());
-            map.put("commission",commissions);
+            map.put("commission",commissions.get());
             map.put("mainCar",mainCar);
             map.put("threeCar",threeCar);
             return map;

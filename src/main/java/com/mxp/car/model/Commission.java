@@ -43,6 +43,7 @@ public class Commission {
     private LocalDate riskDate;
     private String reportNum;
     private BigDecimal damageAmount;
+    private BigDecimal moneyBack;
     private Double discount;
     private String salesman;
     @JsonFormat(pattern = "yyyy-MM-dd")

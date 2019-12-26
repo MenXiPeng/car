@@ -3,14 +3,15 @@ package com.mxp.car.controller;
 import com.mxp.car.config.Config;
 import com.mxp.car.util.ResultRtn;
 import com.mxp.car.util.StatusCode;
+import com.mxp.car.util.Utils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * EMAIL menxipeng@gmail.com
@@ -23,21 +24,23 @@ import java.io.IOException;
 public class FileUpController {
     //多个文件的上传
     @PostMapping("/uploads")
-    public ResultRtn uploads(MultipartFile[] uploadFiles, HttpServletRequest request) {
+    public ResultRtn uploads(MultipartFile[] uploadFiles) {
         //1，对文件数组做判空操作
         if (uploadFiles == null || uploadFiles.length < 1) {
             log.warn("-==上传文件为空==-");
             return ResultRtn.of(StatusCode.UPLOAD_NO_FILE);
         }
         //2，定义文件的存储路径,
-        String realPath = Config.UPLOAD_PATH;
-        File dir = new File(realPath);
+        var realPath = Config.UPLOAD_PATH +"/" + Utils.CarUtil.getUID() + "/";
+        var dir = new File(realPath);
         if (!dir.isDirectory()){
-            log.warn("-==上传路径不存在{}==-",dir);
-            return ResultRtn.of(StatusCode.UPLOAD_NO_PATH);
+            if (!dir.mkdirs()){
+                log.warn("-==上传路径不存在{}==-",dir);
+                return ResultRtn.of(StatusCode.UPLOAD_NO_PATH);
+            }
         }
         try {
-            StringBuilder filePathS = new StringBuilder();
+            var list = new ArrayList<String>();
             //3，遍历文件数组，一个个上传
             for (MultipartFile uploadFile : uploadFiles) {
                 String filename = uploadFile.getOriginalFilename();
@@ -49,17 +52,15 @@ public class FileUpController {
                 log.info("file文件真实路径:" + fileServer.getAbsolutePath());
                 //2，实现上传
                 uploadFile.transferTo(fileServer);
-                String filePath = request.getScheme() + "://" +
-                        request.getServerName() + ":"
-                        + request.getServerPort()
-                        + "/uploadFile/" + filename;
-                filePathS.append("\n").append(filePath);
+                String filePath = realPath + filename;
+                list.add(filePath);
             }
             //4，返回可供访问的网络路径
-            return ResultRtn.of(StatusCode.UPLOAD_SUCCESS,filePathS);
+            return ResultRtn.of(StatusCode.UPLOAD_SUCCESS,list);
         } catch (IOException e) {
             log.error("-==上传异常==-",e);
             return ResultRtn.of(StatusCode.UPLOAD_ERROR);
         }
     }
+
 }

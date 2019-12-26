@@ -11,10 +11,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -78,8 +75,9 @@ public class Utils {
             return result;
         }
 
-        public static void main(String[] args) {
-            
+        public static String getUID() {
+            return UUID.randomUUID().toString().replaceAll("-","");
         }
+
     }
 }

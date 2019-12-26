@@ -8,15 +8,53 @@
         car_info.name,
         car_info.sex,
         car_info.ethnic,
-        car_info.birth,
+        car_info.birth_date,
         car_info.address,
         car_info.id_car,
         car_info.organ_auth,
-        car_info.begin_validity,
-        car_info.end_validity,
+        car_info.begin_validity_date,
+        car_info.end_validity_date,
         car_info.phone,
         car_info.is_main_car,
         car_info.create_time
+    </sql>
+    <sql id="updateColumn">
+        <if test="name != null and name != ''">
+            name=#{name} ,
+        </if>
+        <if test="sex != null">
+            sex=#{sex} ,
+        </if>
+        <if test="ethnic != null and ethnic != ''">
+            ethnic=#{ethnic} ,
+        </if>
+        <if test="birthDate != null">
+            birth_date=#{birthDate} ,
+        </if>
+        <if test="address != null and address != ''">
+            address=#{address} ,
+        </if>
+        <if test="idCar != null and idCar != ''">
+            id_car=#{idCar} ,
+        </if>
+        <if test="organAuth != null and organAuth != ''">
+            organ_auth=#{organAuth} ,
+        </if>
+        <if test="beginValidityDate != null and endValidityDate != null ">
+            begin_validity_date=#{beginValidityDate} ,
+        </if>
+        <if test="beginValidityDate != null and endValidityDate != null ">
+            end_validity_date=#{endValidityDate} ,
+        </if>
+        <if test="phone != null and phone != ''">
+            phone=#{phone} ,
+        </if>
+        <if test="isMainCar != null">
+            is_main_car=#{isMainCar} ,
+        </if>
+        <if test="createTime != null">
+            create_time=#{createTime}
+        </if>
     </sql>
 
     <insert id="insert" parameterType="Car">
@@ -40,45 +78,20 @@
     <update id="updateByCommId" parameterType="Car">
         UPDATE car_info
         <trim prefix="SET" suffixOverrides=",">
-            <if test="name != null and name != ''">
-                name=#{name} ,
-            </if>
-            <if test="sex != null">
-                sex=#{sex} ,
-            </if>
-            <if test="ethnic != null and ethnic != ''">
-                ethnic=#{ethnic} ,
-            </if>
-            <if test="birthDate != null">
-                birth=#{birthDate} ,
-            </if>
-            <if test="address != null and address != ''">
-                address=#{address} ,
-            </if>
-            <if test="idCar != null and idCar != ''">
-                id_car=#{idCar} ,
-            </if>
-            <if test="organAuth != null and organAuth != ''">
-                organ_auth=#{organAuth} ,
-            </if>
-            <if test="beginValidityDate != null and endValidityDate != null ">
-                begin_validity=#{beginValidityDate} ,
-            </if>
-            <if test="beginValidityDate != null and endValidityDate != null ">
-                end_validity=#{endValidityDate} ,
-            </if>
-            <if test="phone != null and phone != ''">
-                phone=#{phone} ,
-            </if>
-            <if test="isMainCar != null">
-                is_main_car=#{isMainCar} ,
-            </if>
-            <if test="createTime != null">
-                create_time=#{createTime}
-            </if>
+            <include refid="updateColumn" />
         </trim>
         <where>
             commission_id=#{commissionId}
+        </where>
+    </update>
+
+    <update id="updateById" parameterType="Car">
+        UPDATE car_info
+        <trim prefix="SET" suffixOverrides=",">
+            <include refid="updateColumn" />
+        </trim>
+        <where>
+            car_id=#{carId}
         </where>
     </update>
 

@@ -16,5 +16,6 @@ import java.util.List;
 public interface DriverInfoMapper extends BaseMapper<DriverInfo,Long> {
     List<DriverInfo> selectByCommId(Long commissionId);
     int updateByCommId(DriverInfo driverInfo);
+    int updateById(DriverInfo driverInfo);
     int deleteByCommId(Long commissionId);
 }

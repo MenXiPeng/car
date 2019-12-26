@@ -141,35 +141,29 @@ public class CommissionServiceImpl extends BaseServiceImpl<Commission,Long>  imp
             log.info(commission);
             var com = this.commissionMapper.updateById(commission);
             // 主车
-            mainCar.put("commissionId",commissionId);
             BeanUtils.populate(isCar,mainCar);
             log.info(isCar);
-            var car1 = this.carMapper.updateByCommId(isCar);
+            var car1 = this.carMapper.updateById(isCar);
             // 三车
-            threeCarMap.put("commissionId",commissionId);
             BeanUtils.populate(isCar,threeCarMap);
             log.info(isCar);
-            var car2 = this.carMapper.updateByCommId(isCar);
+            var car2 = this.carMapper.updateById(isCar);
             // 主车驾驶证
-            mainDriver.put("commissionId",commissionId);
             BeanUtils.populate(isDriverInfo,mainDriver);
             log.info(isDriverInfo);
-            var d1 = this.driverInfoMapper.updateByCommId(isDriverInfo);
+            var d1 = this.driverInfoMapper.updateById(isDriverInfo);
             // 三车驾驶证
-            threeDriver.put("commissionId",commissionId);
             BeanUtils.populate(isDriverInfo,threeDriver);
             log.info(isDriverInfo);
-            var d2 = this.driverInfoMapper.updateByCommId(isDriverInfo);
+            var d2 = this.driverInfoMapper.updateById(isDriverInfo);
             // 主车行驶证
-            mainTravel.put("commissionId",commissionId);
             BeanUtils.populate(isTravel,mainTravel);
             log.info(isTravel);
-            var t1 = this.travelMapper.updateByCommId(isTravel);
+            var t1 = this.travelMapper.updateById(isTravel);
             // 三车行驶证
-            threeTravel.put("commissionId",commissionId);
             BeanUtils.populate(isTravel,threeTravel);
             log.info(isTravel);
-            var t2= this.travelMapper.updateByCommId(isTravel);
+            var t2= this.travelMapper.updateById(isTravel);
             if (com > 0 && car1 > 0 && car2 > 0 && d1 > 0 && d2 > 0 && t1 > 0 && t2 > 0){
                 return 1;
             }else {

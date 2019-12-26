@@ -8,17 +8,65 @@
         driver_info.sex,
         driver_info.country,
         driver_info.address,
-        driver_info.birth,
-        driver_info.first_doc_time,
+        driver_info.birth_date,
+        driver_info.first_doc_date,
         driver_info.drive_model,
-        driver_info.begin_validity,
-        driver_info.end_validity,
+        driver_info.begin_validity_date,
+        driver_info.end_validity_date,
         driver_info.id_car,
         driver_info.file_num,
         driver_info.record,
         driver_info.remarks,
         driver_info.is_main_driver,
         driver_info.create_time
+    </sql>
+
+    <sql id="updateColumn">
+        <if test="name != null and name != ''">
+            name=#{name} ,
+        </if>
+        <if test="sex != null">
+            sex=#{sex} ,
+        </if>
+        <if test="country != null and country != ''">
+            country=#{country},
+        </if>
+        <if test="address != null and address != ''">
+            address=#{address} ,
+        </if>
+        <if test="birthDate != null">
+            birth_date=#{birthDate} ,
+        </if>
+        <if test="firstDocDate != null">
+            first_doc_date=#{firstDocDate} ,
+        </if>
+        <if test="driveModel != null and driveModel != ''">
+            drive_model=#{driveModel} ,
+        </if>
+        <if test="beginValidityDate != null and endValidityDate != null ">
+            begin_validity_date=#{beginValidityDate} ,
+        </if>
+        <if test="beginValidityDate != null and endValidityDate != null ">
+            end_validity_date=#{endValidityDate} ,
+        </if>
+        <if test="idCar != null and idCar != ''">
+            id_car=#{idCar} ,
+        </if>
+        <if test="fileNum != null and fileNum != ''">
+            file_num=#{fileNum} ,
+        </if>
+        <if test="record != null and record != ''">
+            record=#{record} ,
+        </if>
+        <if test="remarks != null and remarks != ''">
+            remarks=#{remarks} ,
+        </if>
+        <if test="isMainDriver != null">
+            is_main_driver=#{isMainDriver} ,
+        </if>
+        <if test="createTime != null">
+            create_time=#{createTime}
+        </if>
     </sql>
 
     <insert id="insert" parameterType="DriverInfo">
@@ -42,54 +90,20 @@
     <update id="updateByCommId" parameterType="DriverInfo">
         UPDATE driver_info
         <trim prefix="SET" suffixOverrides=",">
-            <if test="name != null and name != ''">
-                name=#{name} ,
-            </if>
-            <if test="sex != null">
-                sex=#{sex} ,
-            </if>
-            <if test="country != null and country != ''">
-                country=#{country},
-            </if>
-            <if test="address != null and address != ''">
-                address=#{address} ,
-            </if>
-            <if test="birthDate != null">
-                birth=#{birthDate} ,
-            </if>
-            <if test="firstDocDate != null">
-                first_doc_time=#{firstDocDate} ,
-            </if>
-            <if test="driveModel != null and driveModel != ''">
-                drive_model=#{driveModel} ,
-            </if>
-            <if test="beginValidityDate != null and endValidityDate != null ">
-                begin_validity=#{beginValidityDate} ,
-            </if>
-            <if test="beginValidityDate != null and endValidityDate != null ">
-                end_validity=#{endValidityDate} ,
-            </if>
-            <if test="idCar != null and idCar != ''">
-                id_car=#{idCar} ,
-            </if>
-            <if test="fileNum != null and fileNum != ''">
-                file_num=#{fileNum} ,
-            </if>
-            <if test="record != null and record != ''">
-                record=#{record} ,
-            </if>
-            <if test="remarks != null and remarks != ''">
-                remarks=#{remarks} ,
-            </if>
-            <if test="isMainDriver != null">
-                is_main_driver=#{isMainDriver} ,
-            </if>
-            <if test="createTime != null">
-                create_time=#{createTime}
-            </if>
+            <include refid="updateColumn" />
         </trim>
         <where>
             commission_id=#{commissionId}
+        </where>
+    </update>
+
+    <update id="updateById" parameterType="DriverInfo">
+        UPDATE driver_info
+        <trim prefix="SET" suffixOverrides=",">
+            <include refid="updateColumn" />
+        </trim>
+        <where>
+            driver_id=#{driverId}
         </where>
     </update>
 

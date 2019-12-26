@@ -22,7 +22,8 @@
         commission_info.create_time,
         commission_info.reminder,
         commission_info.remarks,
-        commission_info.direct
+        commission_info.direct,
+        commission_info.money_back
     </sql>
 
     <insert id="insert" parameterType="Commission">
@@ -45,11 +46,12 @@
         #{reminderTime},
         #{createTime},
         #{reminder},
-        #{remarks},#{direct});
+        #{remarks},#{direct},#{moneyBack});
     </insert>
 
     <select id="selectListByPage" parameterType="Map" resultType="Map">
         SELECT
+        com.money_back AS moneyBack,
         com.commission_id AS commissionId,
         com.user_id AS userId,
         com.principal AS principal,
@@ -76,35 +78,44 @@
         LEFT JOIN
         travel tra ON com.commission_id=tra.commission_id
         <trim prefix="WHERE" suffixOverrides="AND|OR">
-            <if test="param.riskDate != null and param.riskDate != '' ">
-                com.risk_date=#{param.riskDate} AND
+            <if test="param.riskDateFrom != null">
+                com.risk_date &gt;= #{param.riskDateFrom} AND
+            </if>
+            <if test="param.riskDateTo != null">
+                com.risk_date &lt;= #{param.riskDateTo} AND
             </if>
             <if test="param.principal != null and param.principal != '' ">
-                com.principal=#{param.principal} AND
+                com.principal like CONCAT('%',#{param.principal},'%') AND
             </if>
             <if test="param.company != null and param.company != '' ">
-                com.company=#{param.company} AND
+                com.company like CONCAT('%',#{param.company},'%') AND
             </if>
             <if test="param.insured != null and param.insured != '' ">
-                com.insured=#{param.insured} AND
+                com.insured like CONCAT('%',#{param.insured},'%') AND
             </if>
             <if test="param.carNum != null and param.carNum != '' ">
-                tra.car_num=#{param.carNum} AND
+                tra.car_num like CONCAT('%',#{param.carNum},'%') AND
             </if>
             <if test="param.reportNum != null and param.reportNum != '' ">
-                com.report_num=#{reportNum} AND
+                com.report_num like CONCAT('%',#{param.reportNum},'%') AND
             </if>
             <if test="param.damageAmount != null and param.damageAmount != '' ">
-                com.damage_amount=#{param.damageAmount} AND
+                com.damage_amount like CONCAT('%',#{param.damageAmount},'%') AND
             </if>
-            <if test="param.paymentDate != null and param.paymentDate != '' ">
-                com.payment_date=#{paymentDate} AND
+            <if test="param.paymentDateFrom != null ">
+                com.payment_date &gt;= #{param.paymentDateFrom} AND
+            </if>
+            <if test="param.paymentDateTo != null ">
+                com.payment_date &lt;= #{param.paymentDateTo} AND
             </if>
             <if test="param.isPayment != null and param.isPayment == 1 ">
                 com.payment_date != null AND
             </if>
-            <if test="param.checkoutDate != null  and aram.checkoutDate != '' ">
-                checkout_date=#{param.checkoutDate} AND
+            <if test="param.checkoutDateFrom != null ">
+                checkout_date &gt;= #{param.checkoutDateFrom} AND
+            </if>
+            <if test="param.checkoutDateTo != null ">
+                checkout_date &lt;= #{param.checkoutDateTo} AND
             </if>
             tra.is_main_travel=1
         </trim>
@@ -120,6 +131,9 @@
     <update id="updateById" parameterType="Commission">
         UPDATE commission_info
         <trim prefix="SET" suffixOverrides=",">
+            <if test="moneyBack != null">
+                money_back=#{moneyBack} ,
+            </if>
             <if test="principal != null and principal != ''">
                 principal=#{principal} ,
             </if>

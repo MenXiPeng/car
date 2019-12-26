@@ -15,5 +15,6 @@ import java.util.List;
 public interface TravelMapper extends BaseMapper<Travel,Long> {
     List<Travel> selectByCommId(Long commissionId);
     int updateByCommId(Travel travel);
+    int updateById(Travel travel);
     int deleteByCommId(Long commissionId);
 }
