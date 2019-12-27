@@ -57,7 +57,7 @@
         </if>
     </sql>
 
-    <insert id="insert" parameterType="Car">
+    <insert id="insert" parameterType="Car"  keyColumn="car_id"  keyProperty="carId">
        INSERT INTO car_info(<include refid="column" />)
         VALUES (#{carId},#{userId},#{commissionId},#{name},#{sex},#{ethnic},#{birthDate},#{address},#{idCar},#{organAuth},#{beginValidityDate},#{endValidityDate},#{phone},#{isMainCar},#{createTime});
     </insert>

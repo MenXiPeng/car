@@ -1,11 +1,9 @@
 package com.mxp.car.service.Impl;
 
 import com.mxp.car.mapper.*;
-import com.mxp.car.model.Car;
-import com.mxp.car.model.Commission;
-import com.mxp.car.model.DriverInfo;
-import com.mxp.car.model.Travel;
+import com.mxp.car.model.*;
 import com.mxp.car.service.CommissionService;
+import com.mxp.car.service.PhotoService;
 import com.mxp.car.util.Utils;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.beanutils.BeanUtils;
@@ -15,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,14 +35,21 @@ public class CommissionServiceImpl extends BaseServiceImpl<Commission,Long>  imp
     private DriverInfoMapper driverInfoMapper;
     @Autowired
     private TravelMapper travelMapper;
+    @Autowired
+    private PhotoService photoService;
 
     @Override
     public BaseMapper<Commission, Long> getMapper() {
         return this.commissionMapper;
     }
 
+
+
+
     @Override
     public int saveAll(Map<String, Map<String,String>> map) {
+        var mainPhoto = map.get("mainPhoto");
+        var threePhoto = map.get("threePhoto");
         var comMap = Utils.CarUtil.mapTo(map.get("commission"));
         var mainCar = Utils.CarUtil.mapTo(map.get("mainCar"));
         var threeCarMap = Utils.CarUtil.mapTo(map.get("threeCar"));
@@ -72,6 +78,7 @@ public class CommissionServiceImpl extends BaseServiceImpl<Commission,Long>  imp
             BeanUtils.populate(isCar,mainCar);
             log.info(isCar);
             var car1 = this.carMapper.insert(isCar);
+            var photo1 = photoService.photoList(mainPhoto,isCar.getCarId());
             // 三车
             threeCarMap.put("carId", Utils.CarUtil.getId());
             threeCarMap.put("userId", usrId);
@@ -80,6 +87,7 @@ public class CommissionServiceImpl extends BaseServiceImpl<Commission,Long>  imp
             BeanUtils.populate(isCar,threeCarMap);
             log.info(isCar);
             var car2 = this.carMapper.insert(isCar);
+            var photo2 = photoService.photoList(threePhoto,isCar.getCarId());
             // 主车驾驶证
             mainDriver.put("createTime",LocalDateTime.now());
             mainDriver.put("driverId",Utils.CarUtil.getId());
@@ -108,7 +116,7 @@ public class CommissionServiceImpl extends BaseServiceImpl<Commission,Long>  imp
             BeanUtils.populate(isTravel,threeTravel);
             log.info(isTravel);
             var t2= this.travelMapper.insert(isTravel);
-            if (com > 0 && car1 > 0 && car2 > 0 && d1 > 0 && d2 > 0 && t1 > 0 && t2 > 0){
+            if (com > 0 && car1 > 0 && car2 > 0 && d1 > 0 && d2 > 0 && t1 > 0 && t2 > 0 && photo1 > 0 && photo2 > 0){
                 return 1;
             }else {
                 return 0;

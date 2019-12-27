@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * EMAIL menxipeng@gmail.com
@@ -75,8 +76,24 @@ public class Utils {
             return result;
         }
 
+        public static  List<String> listSort(List<String> list){
+            list.sort(Comparator.comparing(x -> x.substring(x.lastIndexOf("-")+1)));
+            return list;
+        }
+
         public static String getUID() {
             return UUID.randomUUID().toString().replaceAll("-","");
+        }
+
+        public static void main(String[] args) {
+            var list = new ArrayList<String>();
+            var ss = "/usr/local/2f4683608c7844ac9baa995d19528ff4-1.jsp";
+            list.add("/usr/local/"+getUID()+"-3.jsp");
+            list.add("/usr/local/"+getUID()+"-1.jsp");
+            list.add("/usr/local/"+getUID()+"-4.jsp");
+            list.add("/usr/local/"+getUID()+"-2.png");
+            list.sort(Comparator.comparing(x -> x.substring(x.lastIndexOf("-")+1)));
+            System.out.println(list);
         }
 
     }

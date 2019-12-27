@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * EMAIL menxipeng@gmail.com
@@ -56,7 +57,7 @@ public class FileUpController {
                 list.add(filePath);
             }
             //4，返回可供访问的网络路径
-            return ResultRtn.of(StatusCode.UPLOAD_SUCCESS,list);
+            return ResultRtn.of(StatusCode.UPLOAD_SUCCESS,Utils.CarUtil.listSort(list));
         } catch (IOException e) {
             log.error("-==上传异常==-",e);
             return ResultRtn.of(StatusCode.UPLOAD_ERROR);
