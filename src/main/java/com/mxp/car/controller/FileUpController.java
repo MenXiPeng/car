@@ -5,14 +5,15 @@ import com.mxp.car.util.ResultRtn;
 import com.mxp.car.util.StatusCode;
 import com.mxp.car.util.Utils;
 import lombok.extern.log4j.Log4j2;
+import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * EMAIL menxipeng@gmail.com
@@ -26,13 +27,14 @@ public class FileUpController {
     //多个文件的上传
     @PostMapping("/uploads")
     public ResultRtn uploads(MultipartFile[] uploadFiles) {
+        log.info(uploadFiles);
         //1，对文件数组做判空操作
         if (uploadFiles == null || uploadFiles.length < 1) {
             log.warn("-==上传文件为空==-");
             return ResultRtn.of(StatusCode.UPLOAD_NO_FILE);
         }
-        //2，定义文件的存储路径,
-        var realPath = Config.UPLOAD_PATH +"/" + Utils.CarUtil.getUID() + "/";
+        //2，定义文件的存储路径,当天时间
+        var realPath = Config.UPLOAD_PATH +"/" + Utils.CarUtil.strToDate(LocalDate.now().toString()) + "/";
         var dir = new File(realPath);
         if (!dir.isDirectory()){
             if (!dir.mkdirs()){
@@ -53,6 +55,7 @@ public class FileUpController {
                 log.info("file文件真实路径:" + fileServer.getAbsolutePath());
                 //2，实现上传
                 uploadFile.transferTo(fileServer);
+                Thumbnails.of(fileServer.getAbsolutePath()).size(640,480).toFile(fileServer.getAbsolutePath());
                 String filePath = realPath + filename;
                 list.add(filePath);
             }

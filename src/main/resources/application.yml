@@ -1,9 +1,14 @@
 spring:
   profiles:
     active: dev
-
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+
+  servlet:
+    multipart:
+      max-file-size: 200MB
 server:
-  port: 8087
+  port: 3344
   servlet:
     context-path: /car
 
