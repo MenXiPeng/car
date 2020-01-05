@@ -15,4 +15,6 @@ import java.util.Map;
 public interface PhotoService extends BaseService<Photo,Long> {
     int saveList(List<Photo> list);
     int photoList(Map<String,String> photoMap, Long carId);
+    List<Photo> findListByCarId(Long carId);
+    int remove(Photo photo);
 }

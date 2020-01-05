@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 /**
  * EMAIL menxipeng@gmail.com
  * AUTHOR:menxipeng
@@ -13,11 +15,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Photo {
+public class Photo implements Serializable {
     private Integer id;
     private Long photoId;
     private Long carId;
-    private String name;
     private String url;
     private Integer orderId;
 }

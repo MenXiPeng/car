@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * EMAIL menxipeng@gmail.com
@@ -49,6 +50,7 @@ public class Car {
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate endValidityDate;
     private String phone;
+    private List<String> photo;
     private byte isMainCar;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)

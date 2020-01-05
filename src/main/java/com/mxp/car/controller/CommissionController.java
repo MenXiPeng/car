@@ -5,18 +5,12 @@ import com.mxp.car.model.Car;
 import com.mxp.car.model.Commission;
 import com.mxp.car.model.DriverInfo;
 import com.mxp.car.model.Travel;
-import com.mxp.car.service.CarService;
-import com.mxp.car.service.CommissionService;
-import com.mxp.car.service.DriverService;
-import com.mxp.car.service.TravelService;
+import com.mxp.car.service.*;
 import com.mxp.car.util.ResultRtn;
 import com.mxp.car.util.StatusCode;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 
 import java.util.HashMap;
@@ -32,6 +26,7 @@ import java.util.concurrent.Executor;
  */
 @Log4j2
 @RestController
+@RequestMapping("/comm")
 public class CommissionController {
 
     @Autowired
@@ -44,6 +39,8 @@ public class CommissionController {
     private DriverService driverService;
     @Autowired
     private TravelService travelService;
+    @Autowired
+    private PhotoService photoService;
 
     @PostMapping("/{pageNum}/{pageSize}")
     public DeferredResult<ResultRtn> getComInfo(@PathVariable int pageNum,
@@ -70,7 +67,7 @@ public class CommissionController {
     }
 
     @PostMapping("/addCom")
-    public DeferredResult<ResultRtn> addCommission(@RequestBody Map<String,Map<String,String>> param){
+    public DeferredResult<ResultRtn> addCommission(@RequestBody Map<String,Map<String,Object>> param){
         var result = new DeferredResult<ResultRtn>();
         CompletableFuture.supplyAsync(() -> {
             var status = commissionService.saveAll(param);
@@ -92,7 +89,7 @@ public class CommissionController {
     }
 
     @PostMapping("/modifyCom")
-    public DeferredResult<ResultRtn> modifyCommission(@RequestBody Map<String,Map<String,String>> param){
+    public DeferredResult<ResultRtn> modifyCommission(@RequestBody Map<String,Map<String,Object>> param){
         var result = new DeferredResult<ResultRtn>();
         CompletableFuture.supplyAsync(() -> {
             var status = commissionService.updateAll(param);
@@ -128,23 +125,28 @@ public class CommissionController {
     }
 
     @PostMapping("/details")
-    public DeferredResult<ResultRtn> details(@RequestBody Commission commission){
+    public DeferredResult<ResultRtn> details(@RequestBody Map<String,Long> param){
         var result = new DeferredResult<ResultRtn>();
-        CompletableFuture.supplyAsync(() -> this.commissionService.findById(commission.getCommissionId())).thenCombineAsync(CompletableFuture.supplyAsync(() -> this.carService.findByCommId(commission.getCommissionId())),(commissions, carList) -> {
+        var commissionId = param.get("commissionId");
+        CompletableFuture.supplyAsync(() -> this.commissionService.findById(commissionId)).thenCombineAsync(CompletableFuture.supplyAsync(() -> this.carService.findByCommId(commissionId)),(commissions, carList) -> {
             var map = new HashMap<String,Object>();
             var mainCar = carList.stream().filter(car -> car.getIsMainCar() == 1).findAny().orElse(new Car());
             var threeCar = carList.stream().filter(car -> car.getIsMainCar() == 2).findAny().orElse(new Car());
+//            var threePhoto = this.photoService.findListByCarId(threeCar.getCarId());
+//            var mainPhoto = this.photoService.findListByCarId(mainCar.getCarId());
+//            map.put("mainPhoto",mainPhoto);
+//            map.put("threePhoto",threePhoto);
             map.put("commission",commissions.get());
             map.put("mainCar",mainCar);
             map.put("threeCar",threeCar);
             return map;
-        },asyncExecutor).thenCombineAsync(CompletableFuture.supplyAsync(() -> this.driverService.findByCommId(commission.getCommissionId())),(map, driverInfoList) -> {
+        },asyncExecutor).thenCombineAsync(CompletableFuture.supplyAsync(() -> this.driverService.findByCommId(commissionId)),(map, driverInfoList) -> {
             var mainDriver = driverInfoList.stream().filter(driverInfo -> driverInfo.getIsMainDriver() == 1).findAny().orElse(new DriverInfo());
             var threeDriver = driverInfoList.stream().filter(driverInfo -> driverInfo.getIsMainDriver() == 2).findAny().orElse(new DriverInfo());
             map.put("mainDriver",mainDriver);
             map.put("threeDriver",threeDriver);
             return map;
-        },asyncExecutor).thenCombineAsync(CompletableFuture.supplyAsync(() -> this.travelService.findByCommId(commission.getCommissionId())),(map,travelList) -> {
+        },asyncExecutor).thenCombineAsync(CompletableFuture.supplyAsync(() -> this.travelService.findByCommId(commissionId)),(map,travelList) -> {
             var mainTravel = travelList.stream().filter(travel -> travel.getIsMainTravel() == 1).findAny().orElse(new Travel());
             var threeTravel = travelList.stream().filter(travel -> travel.getIsMainTravel() == 2).findAny().orElse(new Travel());
             map.put("mainTravel",mainTravel);

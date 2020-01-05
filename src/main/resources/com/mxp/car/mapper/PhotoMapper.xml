@@ -2,11 +2,87 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.mxp.car.mapper.PhotoMapper">
 
+    <sql id="column">
+        photo_id,car_id,url,order_id
+    </sql>
+
     <insert id="insertList" parameterType="Photo">
-        INSERT INTO photo(photo_id,car_id,name,url,order_id)
+        INSERT INTO photo(<include refid="column" />)
         VALUES
         <foreach collection="list" item="listP" separator="," >
-            (#{listP.photoId},#{listP.carId},#{listP.name},#{listP.url},#{listP.orderId})
+            (#{listP.photoId},#{listP.carId},#{listP.url},#{listP.orderId})
         </foreach>
     </insert>
+
+    <select id="selectListByPage" parameterType="Map" resultType="Map">
+        SELECT id,photo_id,car_id,url,order_id
+        FROM photo
+        <trim prefix="WHERE" suffixOverrides="AND|OR">
+            <if test="param.photoId != null ">
+                photo_id=#{param.photoId} AND
+            </if>
+            <if test="param.carId != null and param.carId != ''">
+                car_id=#{param.carId} AND
+            </if>
+            <if test="param.url != null and param.url != '' ">
+                url=#{param.url}
+            </if>
+        </trim>
+        ORDER BY order_id
+    </select>
+
+    <select id="selectListByCarId" parameterType="long" resultType="Photo" >
+        SELECT <include refid="column" /> FROM photo
+        <where>
+            car_id=#{carId}
+        </where>
+    </select>
+
+    <select id="selectById" parameterType="long" resultType="Photo">
+        SELECT id,photo_id,car_id,url,order_id FROM photo
+        <where>
+            photo_id=#{id}
+        </where>
+    </select>
+
+    <update id="update" parameterType="Photo" >
+        UPDATE photo
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="carId != null">
+                car_id = #{carId},
+            </if>
+            <if test="url != null and url != ''">
+                url = #{url},
+            </if>
+            <if test="orderId != null">
+                order_id=#{orderId}
+            </if>
+        </trim>
+        <where>
+            photo_id=#{photoId}
+        </where>
+    </update>
+    <update id="updateByList" parameterType="Photo">
+        <foreach collection="param" item="photos" index= "index" open="" close="" separator =";">
+            UPDATE photo
+            <trim prefix="SET" suffixOverrides=",">
+                <if test="photos.url != null and photos.url != '' ">
+                    url=#{photos.url},
+                </if>
+                <if test="photos.orderId != null ">
+                    order_id=#{photos.orderId},
+                </if>
+                <if test="photos.carId != null ">
+                    car_id=#{photos.carId}
+                </if>
+            </trim>
+            <where>
+                photo_id=#{photos.photoId}
+            </where>
+        </foreach>
+    </update>
+
+    <delete id="deleteById" parameterType="long" >
+        DELETE FROM photo where photo_id=#{photoId}
+    </delete>
 </mapper>

@@ -1,5 +1,7 @@
 package com.mxp.car.util;
 
+import com.mxp.car.config.Config;
+import com.mxp.car.model.Photo;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -41,13 +43,13 @@ public class Utils {
             return new BigDecimal(value);
         }
 
-        public static Map<String, Object> mapTo(Map<String, String> map) {
+        public static Map<String, Object> mapTo(Map<String, Object> map) {
             return map.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, x -> {
                 if ((x.getKey().toUpperCase()).contains("TIME")) {
-                    return strToTime(x.getValue());
+                    return strToTime(String.valueOf(x.getValue()));
                 } else if ((x.getKey().toUpperCase()).contains("DATE")) {
                     if (!x.getValue().equals("")) {
-                        return strToDate(x.getValue());
+                        return strToDate(String.valueOf(x.getValue()));
                     }
                 }
                 return x.getValue();
@@ -76,9 +78,9 @@ public class Utils {
             return result;
         }
 
-        public static  List<String> listSort(List<String> list){
-            list.sort(Comparator.comparing(x -> x.substring(x.lastIndexOf("-")+1)));
-            return list;
+        public static String photoUrl(String url){
+            String path = url.split("/photo")[0];
+            return Config.UPLOAD_PATH+path;
         }
 
         public static String getUID() {
@@ -86,14 +88,7 @@ public class Utils {
         }
 
         public static void main(String[] args) {
-            var list = new ArrayList<String>();
-            var ss = "/usr/local/2f4683608c7844ac9baa995d19528ff4-1.jsp";
-            list.add("/usr/local/"+getUID()+"-3.jsp");
-            list.add("/usr/local/"+getUID()+"-1.jsp");
-            list.add("/usr/local/"+getUID()+"-4.jsp");
-            list.add("/usr/local/"+getUID()+"-2.png");
-            list.sort(Comparator.comparing(x -> x.substring(x.lastIndexOf("-")+1)));
-            System.out.println(list);
+            System.out.println(Utils.CarUtil.photoUrl("http://127.0.0.1:3344/photo/2020-01-05/屏幕快照"));
         }
 
     }

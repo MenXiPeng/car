@@ -15,7 +15,10 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * EMAIL menxipeng@gmail.com
@@ -47,9 +50,9 @@ public class CommissionServiceImpl extends BaseServiceImpl<Commission,Long>  imp
 
 
     @Override
-    public int saveAll(Map<String, Map<String,String>> map) {
-        var mainPhoto = map.get("mainPhoto");
-        var threePhoto = map.get("threePhoto");
+    public int saveAll(Map<String, Map<String,Object>> map) {
+        //var mainPhoto = map.get("mainPhoto");
+        //var threePhoto = map.get("threePhoto");
         var comMap = Utils.CarUtil.mapTo(map.get("commission"));
         var mainCar = Utils.CarUtil.mapTo(map.get("mainCar"));
         var threeCarMap = Utils.CarUtil.mapTo(map.get("threeCar"));
@@ -71,23 +74,41 @@ public class CommissionServiceImpl extends BaseServiceImpl<Commission,Long>  imp
             log.info(commission);
             var com = this.commissionMapper.insert(commission);
             // 主车
-            mainCar.put("carId", Utils.CarUtil.getId());
+            Long mainCarId = Utils.CarUtil.getId();
+            mainCar.put("carId", mainCarId);
             mainCar.put("userId", usrId);
             mainCar.put("commissionId",commissionId);
             mainCar.put("createTime",LocalDateTime.now());
             BeanUtils.populate(isCar,mainCar);
-            log.info(isCar);
+            // 绑定photo和car
+            List<Photo> mainPhotos = new ArrayList<>();
+            isCar.getPhoto().forEach(photoId -> {
+                Photo photo = new Photo();
+                photo.setCarId(mainCarId);
+                photo.setPhotoId(Long.valueOf(photoId));
+                mainPhotos.add(photo);
+            });
+            log.info(mainPhotos);
             var car1 = this.carMapper.insert(isCar);
-            var photo1 = photoService.photoList(mainPhoto,isCar.getCarId());
+            this.photoService.modifyByList(mainPhotos);
             // 三车
-            threeCarMap.put("carId", Utils.CarUtil.getId());
+            Long threeCarId = Utils.CarUtil.getId();
+            threeCarMap.put("carId", threeCarId);
             threeCarMap.put("userId", usrId);
             threeCarMap.put("commissionId",commissionId);
             threeCarMap.put("createTime",LocalDateTime.now());
             BeanUtils.populate(isCar,threeCarMap);
-            log.info(isCar);
+            // 绑定photo和car
+            List<Photo> threePhotos = new ArrayList<>();
+            isCar.getPhoto().forEach(photoId -> {
+                Photo photo = new Photo();
+                photo.setCarId(threeCarId);
+                photo.setPhotoId(Long.valueOf(photoId));
+                threePhotos.add(photo);
+            });
+            log.info(threePhotos);
             var car2 = this.carMapper.insert(isCar);
-            var photo2 = photoService.photoList(threePhoto,isCar.getCarId());
+            this.photoService.modifyByList(threePhotos);
             // 主车驾驶证
             mainDriver.put("createTime",LocalDateTime.now());
             mainDriver.put("driverId",Utils.CarUtil.getId());
@@ -116,7 +137,7 @@ public class CommissionServiceImpl extends BaseServiceImpl<Commission,Long>  imp
             BeanUtils.populate(isTravel,threeTravel);
             log.info(isTravel);
             var t2= this.travelMapper.insert(isTravel);
-            if (com > 0 && car1 > 0 && car2 > 0 && d1 > 0 && d2 > 0 && t1 > 0 && t2 > 0 && photo1 > 0 && photo2 > 0){
+            if (com > 0 && car1 > 0 && car2 > 0 && d1 > 0 && d2 > 0 && t1 > 0 && t2 > 0){
                 return 1;
             }else {
                 return 0;
@@ -129,7 +150,7 @@ public class CommissionServiceImpl extends BaseServiceImpl<Commission,Long>  imp
     }
 
     @Override
-    public int updateAll(Map<String, Map<String, String>> map) {
+    public int updateAll(Map<String, Map<String, Object>> map) {
         var comMap = Utils.CarUtil.mapTo(map.get("commission"));
         var mainCar = Utils.CarUtil.mapTo(map.get("mainCar"));
         var threeCarMap = Utils.CarUtil.mapTo(map.get("threeCar"));

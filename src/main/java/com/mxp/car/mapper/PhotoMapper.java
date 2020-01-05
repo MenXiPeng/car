@@ -12,6 +12,7 @@ import java.util.List;
  * TIME: 13:19
  */
 @Mapper
-public interface PhotoMapper extends BaseMapper<Photo,Long>{
+public interface PhotoMapper extends BaseMapper<Photo, Long> {
     int insertList(List<Photo> list);
+    List<Photo> selectListByCarId(Long carId);
 }
