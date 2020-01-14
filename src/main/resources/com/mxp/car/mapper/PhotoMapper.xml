@@ -15,7 +15,7 @@
     </insert>
 
     <select id="selectListByPage" parameterType="Map" resultType="Map">
-        SELECT id,photo_id,car_id,url,order_id
+        SELECT id,photo_id as photoId,car_id as carId,url,order_id as orderId
         FROM photo
         <trim prefix="WHERE" suffixOverrides="AND|OR">
             <if test="param.photoId != null ">
@@ -36,6 +36,7 @@
         <where>
             car_id=#{carId}
         </where>
+        order by order_id
     </select>
 
     <select id="selectById" parameterType="long" resultType="Photo">

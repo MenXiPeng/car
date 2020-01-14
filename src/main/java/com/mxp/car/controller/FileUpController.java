@@ -11,7 +11,6 @@ import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +18,6 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.concurrent.CompletableFuture;
 
 /**
  * EMAIL menxipeng@gmail.com
@@ -34,6 +32,13 @@ public class FileUpController {
     @Autowired
     private PhotoService photoService;
 
+    /**
+     * 替换 和 新增
+     * @param uploadFiles 传入文件
+     * @param request photoId ：替换的id
+     *                carId ： 替换的carId
+     *                orderId ：替换的位置 / 0 为列表里新增
+     */
     //多个文件的上传
     @PostMapping("/uploads")
     public ResultRtn uploads(MultipartFile[] uploadFiles, HttpServletRequest request) {

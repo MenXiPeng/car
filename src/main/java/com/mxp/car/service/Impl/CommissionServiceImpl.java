@@ -9,16 +9,12 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * EMAIL menxipeng@gmail.com
@@ -82,15 +78,17 @@ public class CommissionServiceImpl extends BaseServiceImpl<Commission,Long>  imp
             BeanUtils.populate(isCar,mainCar);
             // 绑定photo和car
             List<Photo> mainPhotos = new ArrayList<>();
-            isCar.getPhoto().forEach(photoId -> {
-                Photo photo = new Photo();
-                photo.setCarId(mainCarId);
-                photo.setPhotoId(Long.valueOf(photoId));
-                mainPhotos.add(photo);
-            });
             log.info(mainPhotos);
             var car1 = this.carMapper.insert(isCar);
-            this.photoService.modifyByList(mainPhotos);
+            if(isCar.getPhoto().size() > 0){
+                isCar.getPhoto().forEach(photoId -> {
+                    Photo photo = new Photo();
+                    photo.setCarId(mainCarId);
+                    photo.setPhotoId(Long.valueOf(photoId));
+                    mainPhotos.add(photo);
+                });
+                this.photoService.modifyByList(mainPhotos);
+            }
             // 三车
             Long threeCarId = Utils.CarUtil.getId();
             threeCarMap.put("carId", threeCarId);
@@ -100,15 +98,18 @@ public class CommissionServiceImpl extends BaseServiceImpl<Commission,Long>  imp
             BeanUtils.populate(isCar,threeCarMap);
             // 绑定photo和car
             List<Photo> threePhotos = new ArrayList<>();
-            isCar.getPhoto().forEach(photoId -> {
-                Photo photo = new Photo();
-                photo.setCarId(threeCarId);
-                photo.setPhotoId(Long.valueOf(photoId));
-                threePhotos.add(photo);
-            });
+            if(isCar.getPhoto().size() > 0){
+                isCar.getPhoto().forEach(photoId -> {
+                    Photo photo = new Photo();
+                    photo.setCarId(threeCarId);
+                    photo.setPhotoId(Long.valueOf(photoId));
+                    threePhotos.add(photo);
+                });
+                this.photoService.modifyByList(threePhotos);
+            }
+
             log.info(threePhotos);
             var car2 = this.carMapper.insert(isCar);
-            this.photoService.modifyByList(threePhotos);
             // 主车驾驶证
             mainDriver.put("createTime",LocalDateTime.now());
             mainDriver.put("driverId",Utils.CarUtil.getId());

@@ -69,4 +69,67 @@ public class PhotoServiceImpl extends BaseServiceImpl<Photo,Long> implements Pho
         return 0;
     }
 
+    /**
+     * 修改排序位置
+     */
+    @Override
+    public boolean modifyOrder(Photo photo) {
+        boolean status;
+        Photo orderPhoto = this.photoMapper.selectById(photo.getPhotoId());
+        List<Photo> photoList = this.photoMapper.selectListByCarId(photo.getCarId());
+        // 图片的原始位置
+        var initOrder = orderPhoto.getOrderId();
+        // 到达位置
+        var endOrder = photo.getOrderId();
+        if (initOrder < endOrder){
+            // 大于原始位置之后都要剪
+            status =  photoList.stream().filter(photo1 -> photo1.getOrderId() >= orderPhoto.getOrderId()).anyMatch(photo1 -> {
+                 Photo photo2 = new Photo();
+                 if (photo1.getOrderId() > endOrder) {
+                    photo2.setPhotoId(photo.getPhotoId());
+                    photo2.setOrderId(endOrder);
+                    this.photoMapper.update(photo2);
+                    return true;
+                } else {
+                     System.out.println(photo1.getPhotoId());
+                     photo2.setPhotoId(photo1.getPhotoId());
+                     photo2.setOrderId(photo1.getOrderId() - 1);
+                    this.photoMapper.update(photo2);
+                    return false;
+                }
+            });
+        }else {
+            status = photoList.stream().filter(photo1 -> photo1.getOrderId() >= endOrder).anyMatch(photo1 -> {
+                Photo photo2 = new Photo();
+                if (photo1.getOrderId().equals(initOrder)) {
+                    photo2.setPhotoId(photo.getPhotoId());
+                    photo2.setOrderId(endOrder);
+                    this.photoMapper.update(photo2);
+                    return true;
+                } else {
+                    System.out.println(photo1.getOrderId());
+                    System.out.println(photo1.getPhotoId());
+                    photo2.setPhotoId(photo1.getPhotoId());
+                    photo2.setOrderId(photo1.getOrderId() + 1);
+                    this.photoMapper.update(photo2);
+                    return false;
+                }
+            });
+        }
+        return status;
+    }
+
+    /**
+     * 插入排序
+     */
+    @Override
+    public int modifyInsertOrder(Photo photo) {
+        List<Photo> photoList = this.photoMapper.selectListByCarId(photo.getCarId());
+        photoList.stream().filter(photo1 -> photo1.getOrderId() >= photo.getOrderId()).forEach(photo1 -> {
+            photo1.setOrderId(photo1.getOrderId()+1);
+            this.photoMapper.update(photo1);
+        });
+        return this.photoMapper.update(photo);
+    }
+
 }

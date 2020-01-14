@@ -1,6 +1,5 @@
 package com.mxp.car.service;
 
-import com.mxp.car.model.DriverInfo;
 import com.mxp.car.model.Photo;
 
 import java.util.List;
@@ -17,4 +16,6 @@ public interface PhotoService extends BaseService<Photo,Long> {
     int photoList(Map<String,String> photoMap, Long carId);
     List<Photo> findListByCarId(Long carId);
     int remove(Photo photo);
+    boolean modifyOrder(Photo photo);
+    int modifyInsertOrder(Photo photo);
 }

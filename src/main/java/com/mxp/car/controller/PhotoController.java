@@ -74,7 +74,7 @@ public class PhotoController {
         return result;
     }
 
-    @PostMapping("modify")
+    @PostMapping("/modify")
     public DeferredResult<ResultRtn> modifyPhoto(@RequestBody List<Photo> photos){
         var result = new DeferredResult<ResultRtn>();
         CompletableFuture.supplyAsync(() -> {
@@ -91,6 +91,49 @@ public class PhotoController {
                 exceptionally(e -> {
                     log.error("-==修改图片超时或异常==-",e);
                     result.setResult(ResultRtn.of(StatusCode.TIMEOUT_OR_ERROR));
+                    return "Error";
+                });
+        return result;
+    }
+
+    @PostMapping("/order")
+    public DeferredResult<ResultRtn> order(@RequestBody Photo photo){
+        var result = new DeferredResult<ResultRtn>();
+        CompletableFuture.supplyAsync(() -> {
+            var status = this.photoService.modifyOrder(photo);
+            if (status){
+                log.info("-==修改排序成功==-");
+                result.setResult(ResultRtn.of(StatusCode.SUCCESS));
+            }else {
+                log.warn("-==修改排序失败==-");
+                result.setResult(ResultRtn.of(StatusCode.ERROR));
+            }
+            return "Success";
+        }).orTimeout(Config.TIMEOUT_TIME,Config.TIME_UNIT).
+                exceptionally(e -> {
+                    log.error("-==图片排序出现异常==-",e);
+                    return "Error";
+                });
+        return result;
+    }
+
+    @PostMapping("/insertOrder")
+    public DeferredResult<ResultRtn> insertOrder(@RequestBody Photo photo){
+        var result = new DeferredResult<ResultRtn>();
+        CompletableFuture.supplyAsync(() -> {
+            var status = this.photoService.modifyInsertOrder(photo);
+            if (status > 0){
+                log.info("-==插入修改排序成功==-");
+                result.setResult(ResultRtn.of(StatusCode.SUCCESS));
+            }else {
+                log.warn("-==插入修改排序失败==-");
+                result.setResult(ResultRtn.of(StatusCode.ERROR));
+            }
+            result.setResult(ResultRtn.of(StatusCode.SUCCESS));
+            return "Success";
+        }).orTimeout(Config.TIMEOUT_TIME,Config.TIME_UNIT).
+                exceptionally(e -> {
+                    log.error("-==插入图片排序出现异常==-",e);
                     return "Error";
                 });
         return result;
