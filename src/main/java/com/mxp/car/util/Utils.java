@@ -1,11 +1,9 @@
 package com.mxp.car.util;
 
 import com.mxp.car.config.Config;
-import com.mxp.car.model.Photo;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -15,7 +13,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * EMAIL menxipeng@gmail.com
@@ -78,13 +75,24 @@ public class Utils {
             return result;
         }
 
-        public static String photoUrl(String url){
+        public static String photoUrl(String url) {
             String path = url.split("/photo")[0];
-            return Config.UPLOAD_PATH+path;
+            return Config.UPLOAD_PATH + path;
+        }
+
+        public static <T> List<T> objectcastList(Object obj, Class<T> clazz) {
+            List<T> result = new LinkedList<>();
+            if (obj instanceof List<?>) {
+                for (Object o : (List<?>) obj) {
+                    result.add(clazz.cast(o));
+                }
+                return result;
+            }
+            return null;
         }
 
         public static String getUID() {
-            return UUID.randomUUID().toString().replaceAll("-","");
+            return UUID.randomUUID().toString().replaceAll("-", "");
         }
 
         public static void main(String[] args) {

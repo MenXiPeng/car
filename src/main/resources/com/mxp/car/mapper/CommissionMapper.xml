@@ -51,7 +51,6 @@
 
     <select id="selectListByPage" parameterType="Map" resultType="Map">
         SELECT
-        com.money_back AS moneyBack,
         com.commission_id AS commissionId,
         com.user_id AS userId,
         com.principal AS principal,
@@ -72,6 +71,7 @@
         com.reminder AS reminder,
         com.remarks AS remarks,
         com.direct AS direct,
+        com.money_back AS moneyBack,
         tra.car_num AS carNum,
         tra.car_type AS carType
         FROM commission_info com
