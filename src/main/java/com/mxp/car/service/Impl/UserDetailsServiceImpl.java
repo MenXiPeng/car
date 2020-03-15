@@ -3,8 +3,8 @@ package com.mxp.car.service.Impl;
 import com.mxp.car.mapper.BaseMapper;
 import com.mxp.car.mapper.UserMapper;
 import com.mxp.car.model.User;
-import com.mxp.car.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,6 +23,9 @@ public class UserDetailsServiceImpl extends BaseServiceImpl<User, Long> implemen
     @Autowired
     private UserMapper userMapper;
 
+    @Value("${uuid}")
+    private String configUUID;
+
     @Override
     public BaseMapper<User, Long> getMapper() {
         return userMapper;
@@ -36,8 +39,7 @@ public class UserDetailsServiceImpl extends BaseServiceImpl<User, Long> implemen
             throw new RuntimeException("用户不存在");
         }
         if (!StringUtils.isEmpty(user.getVerification())) {
-            String machine = Utils.CarUtil.getMachine();
-            if (!user.getVerification().equals(machine)) {
+            if (!user.getVerification().equals(configUUID)) {
                 throw new RuntimeException("机器码验证失败");
             }
         }

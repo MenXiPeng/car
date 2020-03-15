@@ -41,7 +41,7 @@ public class RegisteredServiceImpl extends BaseServiceImpl implements Registered
             result.put("username", paramMap.get("username"));
             String machine = Utils.CarUtil.getMachine();
             log.info("{}:{}", paramMap.get("password"), machine);
-            result.put("machine", machine);
+            result.put("machine", configUUID);
             User user = new User();
             user.setName("");
             user.setVerification(result.get("machine"));
