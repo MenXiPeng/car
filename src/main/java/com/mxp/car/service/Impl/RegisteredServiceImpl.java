@@ -9,7 +9,6 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;
@@ -21,9 +20,6 @@ import java.util.Map;
 public class RegisteredServiceImpl extends BaseServiceImpl implements RegisteredService {
     @Autowired
     private UserMapper userMapper;
-
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Value("${uuid}")
     private String configUUID;
@@ -37,7 +33,7 @@ public class RegisteredServiceImpl extends BaseServiceImpl implements Registered
     public Map<String, String> getPasswordAndMachineCode(Map<String, String> paramMap) {
         Map<String, String> result = new LinkedHashMap<>();
         if (configUUID.equals(paramMap.get("uuidKey"))) {
-            result.put("password", bCryptPasswordEncoder.encode(paramMap.get("password")));
+            result.put("password", paramMap.get("password"));
             result.put("username", paramMap.get("username"));
             String machine = Utils.CarUtil.getMachine();
             log.info("{}:{}", paramMap.get("password"), machine);
@@ -54,5 +50,11 @@ public class RegisteredServiceImpl extends BaseServiceImpl implements Registered
             userMapper.insert(user);
         }
         return result;
+    }
+
+    @Override
+    public User login(String username, String password) {
+        User select = userMapper.selectUserByUsername(username);
+        return select;
     }
 }

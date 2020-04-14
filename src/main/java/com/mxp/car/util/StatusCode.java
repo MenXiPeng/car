@@ -19,6 +19,7 @@ public enum StatusCode {
     LOGIN_ACCOUNT_DISABLED(10037, "账户被禁用，登录失败，请联系管理员!"),
     LOGIN_INSUFFICIENT_PERMISSIONS(10038, "权限不足，请联系管理员!"),
     LOGOUT_ERROR(10039, "注销失败"),
+    LOGOUT_PLEASE(10040, "请登录"),
     REPEAT_ERROR(10051, "重复错误"),
     TIMEOUT_OR_ERROR(10231, "超时异常"),
     UNKNOWN_ERROR(40015,"状态码异常错误"),

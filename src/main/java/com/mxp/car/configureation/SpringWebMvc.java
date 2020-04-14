@@ -92,5 +92,4 @@ public class SpringWebMvc implements WebMvcConfigurer {
     public ErrorPageRegistrar errorPageRegistrar() {
         return registry -> registry.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/index.html"));
     }
-
 }
