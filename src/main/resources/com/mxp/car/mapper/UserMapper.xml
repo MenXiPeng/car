@@ -12,13 +12,25 @@
         `user`.user_id
     </sql>
 
+    <sql id="columnAll">
+        `user`.id,
+        `user`.name,
+        `user`.verification,
+        `user`.username,
+        `user`.password,
+        `user`.company,
+        `user`.phone,
+        `user`.address,
+        `user`.user_id
+    </sql>
+
     <insert id="insert" parameterType="com.mxp.car.model.User">
         INSERT INTO user(<include refid="column"/>)
         VALUES (#{name},#{verification},#{username},#{password},#{company},#{phone},#{address},#{userId})
     </insert>
     <select id="selectUserByUsername" resultType="com.mxp.car.model.User">
         select
-        <include refid="column"/>
+        <include refid="columnAll"/>
         from `user`
         <where>
             username='${username}'

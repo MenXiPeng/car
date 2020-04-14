@@ -31,7 +31,7 @@ public class RegisteredController {
     }
 
     @PostMapping("/login")
-    public ResultRtn<Map<String, String>> login(@RequestParam String username, @RequestParam String password, HttpSession httpSession) {
+    public ResultRtn<User> login(@RequestParam String username, @RequestParam String password, HttpSession httpSession) {
         User login = registeredService.login(username, password);
         if (Objects.nonNull(login)) {
             if (!login.getPassword().equals(password)) {
@@ -39,7 +39,7 @@ public class RegisteredController {
             } else {
                 httpSession.setAttribute("user", login);
                 httpSession.setMaxInactiveInterval(6000);
-                return ResultRtn.of(StatusCode.LOGIN_SUCCESS);
+                return ResultRtn.of(StatusCode.LOGIN_SUCCESS,login);
             }
         } else {
             return ResultRtn.of(StatusCode.LOGIN_ERROR);

@@ -44,9 +44,4 @@ public class ExcelController {
             e.printStackTrace();
         }
     }
-
-    @GetMapping("/test")
-    public String test() {
-        return "`";
-    }
 }
