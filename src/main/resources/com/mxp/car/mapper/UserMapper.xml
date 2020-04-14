@@ -21,7 +21,8 @@
         `user`.company,
         `user`.phone,
         `user`.address,
-        `user`.user_id
+        `user`.user_id,、
+
     </sql>
 
     <insert id="insert" parameterType="com.mxp.car.model.User">
@@ -30,8 +31,10 @@
     </insert>
     <select id="selectUserByUsername" resultType="com.mxp.car.model.User">
         select
-        <include refid="columnAll"/>
-        from `user`
+        <include refid="columnAll"/>,
+        c.reminder_time,
+        c.reminder
+        from `user` user left join commission_info c on  user.id=c.user_id
         <where>
             username='${username}'
         </where>
